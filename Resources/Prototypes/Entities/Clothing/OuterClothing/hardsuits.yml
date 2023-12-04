@@ -857,3 +857,39 @@
     node: clownHardsuit
   - type: ToggleableClothing
     clothingPrototype: ClothingHeadHelmetHardsuitClown
+    
+#Adminium, Hardsuit
+- type: entity
+  parent: ClothingOuterHardsuitBase
+  id: ClothingOuterHardsuitAdminium
+  name: adminium hardsuit
+  description: Trollface.
+  suffix: Hardsuit, Admin
+  components:
+  - type: Sprite
+    sprite: Clothing/OuterClothing/Hardsuits/adminium.rsi
+  - type: Clothing
+    sprite: Clothing/OuterClothing/Hardsuits/adminium.rsi
+  - type: PressureProtection
+    highPressureMultiplier: 0
+    lowPressureMultiplier: 1000
+  - type: TemperatureProtection
+    coefficient: 0
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0
+        Slash: 0
+        Piercing: 0
+        Caustic: 0
+        Radiation: 0
+        Heat: 0
+        Cold: 0
+        Shock: 0
+  - type: ClothingSpeedModifier
+    walkModifier: 1.1
+    sprintModifier: 1.1
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitAdminium

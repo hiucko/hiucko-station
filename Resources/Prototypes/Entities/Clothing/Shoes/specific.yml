@@ -204,9 +204,32 @@
   - type: Item
     sprite: Clothing/Shoes/Specific/skates.rsi
   - type: ClothingSpeedModifier
-    walkModifier: 1.2
-    sprintModifier: 1.2
+    walkModifier: 1.1
+    sprintModifier: 1.1
   - type: Skates
   - type: FootstepModifier
     footstepSoundCollection:
       collection: FootstepSkates
+      
+- type: entity
+  parent: ClothingShoesChameleon
+  id: ClothingShoesChameleonNoSlipsAdminium
+  name: black shoes #actual name and description in uplink_catalog.yml
+  suffix: No-slip, Chameleon, Adminium
+  description: Trollface.
+  components:
+  - type: NoSlip
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0
+        Slash: 0
+        Piercing: 0
+        Caustic: 0
+        Radiation: 0
+        Heat: 0
+        Cold: 0
+        Shock: 0
+  - type: ClothingSpeedModifier
+  walkModifier: 1.1
+  sprintModifier: 1.1

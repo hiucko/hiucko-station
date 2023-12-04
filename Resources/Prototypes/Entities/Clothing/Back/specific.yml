@@ -18,6 +18,38 @@
           type: StorageBoundUserInterface
         - key: enum.ChameleonUiKey.Key
           type: ChameleonBoundUserInterface
+          
+- type: entity
+  parent: ClothingBackpack
+  id: ClothingBackpackChameleonAdminium
+  name: Adminium backpack
+  description: Trollface.
+  suffix: Chameleon, Adminium
+  components:
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+    - type: Sprite
+      sprite: Clothing/Back/Backpacks/backpack.rsi
+    - type: ChameleonClothing
+      slot: [back]
+      default: ClothingBackpack
+    - type: UserInterface
+      interfaces:
+        - key: enum.StorageUiKey.Key
+          type: StorageBoundUserInterface
+        - key: enum.ChameleonUiKey.Key
+          type: ChameleonBoundUserInterface
+    - type: Armor
+      modifiers:
+        coefficients:
+          Blunt: 0
+          Slash: 0
+          Piercing: 0
+          Caustic: 0
+          Radiation: 0
+          Heat: 0
+          Cold: 0
+          Shock: 0
 
 - type: entity
   parent: Clothing

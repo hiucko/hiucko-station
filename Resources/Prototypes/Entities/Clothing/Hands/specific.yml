@@ -17,7 +17,55 @@
     - type: Fiber
       fiberMaterial: fibers-chameleon
     - type: FingerprintMask
+    - type: GloveHeatResistance
+      heatResistance: 2000
+    - type: Insulated
     - type: UserInterface
       interfaces:
         - key: enum.ChameleonUiKey.Key
           type: ChameleonBoundUserInterface
+          
+- type: entity
+  parent: ClothingHandsChameleonThief
+  id: ClothingHandsChameleonThiefAdminium
+  name: Adminium black gloves
+  description: Trollface
+  suffix: Chameleon, Admin, Thieving
+  components:
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+    - type: Sprite
+      sprite: Clothing/Hands/Gloves/Color/black.rsi
+    - type: Clothing
+      sprite: Clothing/Hands/Gloves/Color/black.rsi
+    - type: ChameleonClothing
+      slot: [gloves]
+      default: ClothingHandsGlovesColorBlack
+    - type: FingerprintMask
+    - type: UserInterface
+      interfaces:
+        - key: enum.ChameleonUiKey.Key
+          type: ChameleonBoundUserInterface
+    - type: Armor
+      modifiers:
+        coefficients:
+          Blunt: 0
+          Slash: 0
+          Piercing: 0
+          Caustic: 0
+          Radiation: 0
+          Heat: 0
+          Cold: 0
+          Shock: 0
+ 
+- type: entity
+  parent: ClothingHandsChameleon
+  id: ClothingHandsChameleonThief
+  suffix: Chameleon, Thieving
+  components:
+  - type: GloveHeatResistance
+    heatResistance: 2000
+  - type: Insulated
+  - type: Thieving
+    stripTimeReduction: 2
+    stealthy: true

@@ -18,3 +18,43 @@
       interfaces:
         - key: enum.ChameleonUiKey.Key
           type: ChameleonBoundUserInterface
+
+- type: entity
+  parent: ClothingHeadsetGrey
+  id: ClothingHeadsetChameleonAdminium
+  name: Adminium headset
+  description: Trollface.
+  suffix: Chameleon
+  components:
+    - type: ContainerFill
+    - containers:
+      key_slots:
+      - EncryptionKeyCentCom
+      - EncryptionKeyStationMaster
+      - EncryptionKeyRobo
+      - EncryptionKeyFreelance
+      - EncryptionKeySyndie
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+    - type: Sprite
+      sprite: Clothing/Ears/Headsets/base.rsi
+    - type: Clothing
+      sprite: Clothing/Ears/Headsets/base.rsi
+    - type: ChameleonClothing
+      slot: [ears]
+      default: ClothingHeadsetGrey
+    - type: UserInterface
+      interfaces:
+        - key: enum.ChameleonUiKey.Key
+          type: ChameleonBoundUserInterface
+    - type: Armor
+      modifiers:
+        coefficients:
+          Blunt: 0
+          Slash: 0
+          Piercing: 0
+          Caustic: 0
+          Radiation: 0
+          Heat: 0
+          Cold: 0
+          Shock: 0

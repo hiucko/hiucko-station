@@ -21,3 +21,38 @@
       interfaces:
         - key: enum.ChameleonUiKey.Key
           type: ChameleonBoundUserInterface
+          
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitChameleonAdminium
+  name: black jumpsuit
+  description: Trollface.
+  suffix: Chameleon, Admin
+  components:
+    - type: Tag
+      tags: [] # ignore "WhitelistChameleon" tag
+    - type: Sprite
+      sprite: Clothing/Uniforms/Jumpsuit/Color/black.rsi
+    - type: Clothing
+      sprite: Clothing/Uniforms/Jumpsuit/Color/black.rsi
+    - type: SuitSensor
+      randomMode: false
+      mode: SensorOff
+    - type: ChameleonClothing
+      slot: [innerclothing]
+      default: ClothingUniformJumpsuitColorBlack
+    - type: UserInterface
+      interfaces:
+        - key: enum.ChameleonUiKey.Key
+          type: ChameleonBoundUserInterface
+    - type: Armor
+      modifiers:
+        coefficients:
+          Blunt: 0
+          Slash: 0
+          Piercing: 0
+          Caustic: 0
+          Radiation: 0
+          Heat: 0
+          Cold: 0
+          Shock: 0

@@ -693,3 +693,29 @@
     sprite: Clothing/Head/Hardsuits/clown.rsi
     equipSound: /Audio/Mecha/mechmove03.ogg
     unequipSound: /Audio/Effects/Emotes/parp1.ogg
+    
+- type: entity
+  parent: ClothingHeadHardsuitBase
+  id: ClothingHeadHelmetHardsuitAdminium
+  noSpawn: true
+  name: adminium hardsuit helmet
+  description: A robust helmet for admin's operations.
+  components:
+  - type: Sprite
+    sprite: Clothing/Head/Hardsuits/adminium.rsi
+  - type: Clothing
+    sprite: Clothing/Head/Hardsuits/adminium.rsi
+  - type: PressureProtection
+    highPressureMultiplier: 0
+    lowPressureMultiplier: 1000
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0
+        Slash: 0
+        Piercing: 0
+        Heat: 0
+        Radiation: 0
+        Caustic: 0
+        Cold: 0
+        Shock: 0
