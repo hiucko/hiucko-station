@@ -63,9 +63,5 @@
   id: ClothingHandsChameleonThief
   suffix: Chameleon, Thieving
   components:
-  - type: GloveHeatResistance
-    heatResistance: 2000
-  - type: Insulated
-  - type: Thieving
     stripTimeReduction: 2
     stealthy: true
