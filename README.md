@@ -3,9 +3,9 @@
 Космическая станция 14 - это ремейк SS13, сделанный на движке [Robust Toolbox](https://github.com/space-wizards/RobustToolbox). Это самописный движок написанный на языке C#.
 
 Этот репозиторий - сборник из нескольких разных билдов и форков, с некоторыми авторскими доработками. В их числе:
-[Space Wizards](https://github.com/space-wizards/space-station-14/) ветка wizard 
-[Corvax](<https://github.com/space-syndicate/space-station-14/>) ветка corvax
-[RMC](<https://github.com/RMC-14/RMC-14>) ветка RMC
+- [Space Wizards](https://github.com/space-wizards/space-station-14/), ветка wizard
+- [Corvax](<https://github.com/space-syndicate/space-station-14/>), ветка corvax
+- [RMC](<https://github.com/RMC-14/RMC-14>), ветка RMC
 
 Все вышеперечисленные билды были сделаны их собственными авторами, и их командой разработки. Владелец этого репозитория ни коим образом не претендует на авторство их разработок.
 
