@@ -40,7 +40,7 @@ public sealed class OptionsUIController : UIController
         if (_optionsWindow is { Disposed: false })
             return;
 
-        _optionsWindow = UIManager.CreateWindow<OptionsMenu>();
+            _optionsWindow = UIManager.CreateWindow<OptionsMenu>();
     }
 
     public void OpenWindow()

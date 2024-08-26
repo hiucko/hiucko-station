@@ -2,6 +2,7 @@ using Content.Server.Explosion.Components;
 using Content.Shared.Flash.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Throwing;
+using Robust.Shared.Spawners;
 using Robust.Shared.Containers;
 using Robust.Shared.Random;
 using Content.Server.Weapons.Ranged.Systems;
@@ -115,7 +116,7 @@ public sealed class ClusterGrenadeSystem : EntitySystem
                     }
                 }
                 // delete the empty shell of the clusterbomb
-                Del(uid);
+                QueueDel(uid);
             }
         }
     }
