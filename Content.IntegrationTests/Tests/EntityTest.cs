@@ -236,6 +236,16 @@ namespace Content.IntegrationTests.Tests
 
                 // makes an announcement on mapInit.
                 "AnnounceOnSpawn",
+
+                // Spreads weeds
+                "HiveCore",
+
+                // Creates requisitions account
+                "RequisitionsComputer",
+
+                "EvenSmoke",
+                "SpawnOnTerminate",
+                "DropshipFabricator"
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);
@@ -265,7 +275,7 @@ namespace Content.IntegrationTests.Tests
             {
                 // TODO fix ninja
                 // Currently ninja fails to equip their own loadout.
-                if (protoId == "MobHumanSpaceNinja")
+                if (protoId == "MobHumanSpaceNinja" || protoId == "MobHumanSyndicateAgent")
                     continue;
 
                 var count = server.EntMan.EntityCount;

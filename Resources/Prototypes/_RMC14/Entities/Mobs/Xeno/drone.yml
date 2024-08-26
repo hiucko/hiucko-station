@@ -1,0 +1,92 @@
+﻿- type: entity
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  id: CMXenoDrone
+  name: Drone
+  description: An alien drone.
+  components:
+  - type: GhostRole
+    name: cm-job-name-xeno-drone
+  - type: Sprite
+    sprite: _RMC14/Mobs/Xenonids/Drone/drone.rsi
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      500: Critical
+      600: Dead
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 22.5
+  - type: Xeno
+    role: CMXenoDrone
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoAcidWeak
+    - ActionXenoPheromones
+    - ActionXenoOrderConstruction
+    - ActionXenoPlantWeeds
+    - ActionXenoChooseStructure
+    - ActionXenoSecreteStructure
+    - ActionXenoTransferPlasma
+    - ActionXenoDevolve
+    hudOffset: 0,0.15
+    tier: 1
+    bypassTierCount: true
+    unlockAt: 60 # 1 minute
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoLarva
+  - type: XenoAcid
+  - type: XenoConstruction
+    buildDelay: 2
+    canBuild:
+    - WallXenoResin
+    - WallXenoMembrane
+    - DoorXenoResin
+    canOrderConstruction:
+    - HiveCoreXenoConstructionNode
+  - type: XenoDevour
+  - type: XenoEvolution
+    canEvolveWithoutGranter: true
+    max: 300
+    evolvesTo:
+#    - CMXenoCarrier
+#    - CMXenoBurrower
+    - CMXenoHivelord
+    evolvesToWithoutPoints:
+    - CMXenoQueen
+  - type: XenoPheromones
+    pheromonesMultiplier: 2
+  - type: XenoPlasma
+    plasma: 1000
+    maxPlasma: 1000
+    plasmaRegenOnWeeds: 4.5
+  - type: Tackle # min: 2, max: 4
+    threshold: 4
+    stun: 7
+  - type: WhitelistPickup
+    whitelist:
+      components:
+      - XenoParasite
+      - XenoEgg
+  - type: MultiHandedHolder
+    items:
+    - hands: 2
+      whitelist:
+        components:
+        - XenoEgg
+  - type: RMCXenoDamageVisuals
+    prefix: drone
+

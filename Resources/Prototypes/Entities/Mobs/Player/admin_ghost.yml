@@ -29,6 +29,9 @@
   - type: Access
     groups:
     - AllAccess
+    - ShipMasterAccess
+    - Corp
+    - Colony
     tags:
     - NuclearOperative
     - SyndicateAgent
@@ -91,6 +94,8 @@
   - type: Loadout
     prototypes: [ MobAghostGear ]
   - type: BypassInteractionChecks
+  - type: ParalyzeOnPullAttemptImmune
+  - type: BypassSkillChecks
 
 - type: entity
   id: ActionAGhostShowSolar

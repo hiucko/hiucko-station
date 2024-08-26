@@ -24,13 +24,13 @@ namespace Content.Shared.CCVar
         ///     Guide Entry Prototype ID to be displayed as the server rules.
         /// </summary>
         public static readonly CVarDef<string> RulesFile =
-            CVarDef.Create("server.rules_file", "DefaultRuleset", CVar.REPLICATED | CVar.SERVER);
+            CVarDef.Create("server.rules_file", "CMOverview", CVar.REPLICATED | CVar.SERVER);
 
         /// <summary>
         ///     Guide entry that is displayed by default when a guide is opened.
         /// </summary>
         public static readonly CVarDef<string> DefaultGuide =
-            CVarDef.Create("server.default_guide", "NewPlayer", CVar.REPLICATED | CVar.SERVER);
+            CVarDef.Create("server.default_guide", "RMC14", CVar.REPLICATED | CVar.SERVER);
 
         /*
          * Ambience
@@ -108,7 +108,7 @@ namespace Content.Shared.CCVar
         ///     Controls if the game should run station events
         /// </summary>
         public static readonly CVarDef<bool>
-            EventsEnabled = CVarDef.Create("events.enabled", true, CVar.ARCHIVE | CVar.SERVERONLY);
+            EventsEnabled = CVarDef.Create("events.enabled", false, CVar.ARCHIVE | CVar.SERVERONLY);
 
         /*
          * Game
@@ -142,19 +142,19 @@ namespace Content.Shared.CCVar
         ///     Controls the default game preset.
         /// </summary>
         public static readonly CVarDef<string>
-            GameLobbyDefaultPreset = CVarDef.Create("game.defaultpreset", "secret", CVar.ARCHIVE);
+            GameLobbyDefaultPreset = CVarDef.Create("game.defaultpreset", "CMDistressSignal", CVar.ARCHIVE);
 
         /// <summary>
         ///     Controls if the game can force a different preset if the current preset's criteria are not met.
         /// </summary>
         public static readonly CVarDef<bool>
-            GameLobbyFallbackEnabled = CVarDef.Create("game.fallbackenabled", true, CVar.ARCHIVE);
+            GameLobbyFallbackEnabled = CVarDef.Create("game.fallbackenabled", false, CVar.ARCHIVE);
 
         /// <summary>
         ///     The preset for the game to fall back to if the selected preset could not be used, and fallback is enabled.
         /// </summary>
         public static readonly CVarDef<string>
-            GameLobbyFallbackPreset = CVarDef.Create("game.fallbackpreset", "Traitor,Extended", CVar.ARCHIVE);
+            GameLobbyFallbackPreset = CVarDef.Create("game.fallbackpreset", "CMDistressSignal", CVar.ARCHIVE);
 
         /// <summary>
         ///     Controls if people can win the game in Suspicion or Deathmatch.
@@ -404,7 +404,7 @@ namespace Content.Shared.CCVar
         /// The id of the sound collection to randomly choose a sound from and play when the round ends.
         /// </summary>
         public static readonly CVarDef<string> RoundEndSoundCollection =
-            CVarDef.Create("game.round_end_sound_collection", "RoundEnd", CVar.SERVERONLY);
+            CVarDef.Create("game.round_end_sound_collection", "CMRoundEnd", CVar.SERVERONLY);
 
         /// <summary>
         /// Whether or not to add every player as a global override to PVS at round end.
@@ -484,7 +484,7 @@ namespace Content.Shared.CCVar
         ///     The dataset prototype to use when selecting a random tip.
         /// </summary>
         public static readonly CVarDef<string> TipsDataset =
-            CVarDef.Create("tips.dataset", "Tips");
+            CVarDef.Create("tips.dataset", "CM_Tips");
 
         /// <summary>
         ///     The number of seconds between each tip being displayed when the round is not actively going
@@ -681,7 +681,7 @@ namespace Content.Shared.CCVar
         public static readonly CVarDef<float> AdminChatSoundVolume =
             CVarDef.Create("audio.admin_chat_sound_volume", -5f, CVar.ARCHIVE | CVar.CLIENT | CVar.REPLICATED);
         public static readonly CVarDef<string> AHelpSound =
-            CVarDef.Create("audio.ahelp_sound", "/Audio/Effects/adminhelp.ogg", CVar.ARCHIVE | CVar.CLIENTONLY);
+            CVarDef.Create("audio.ahelp_sound", "/Audio/_RMC14/Effects/Admin/adminhelp.ogg", CVar.ARCHIVE | CVar.CLIENTONLY);
 
         /*
          * HUD
@@ -835,7 +835,7 @@ namespace Content.Shared.CCVar
         ///     Minimum explosion intensity to create an admin alert message. -1 to disable the alert.
         /// </summary>
         public static readonly CVarDef<int> AdminAlertExplosionMinIntensity =
-            CVarDef.Create("admin.alert.explosion_min_intensity", 60, CVar.SERVERONLY);
+            CVarDef.Create("admin.alert.explosion_min_intensity", -1, CVar.SERVERONLY);
 
         /// <summary>
         ///     Minimum particle accelerator strength to create an admin alert message.
@@ -1032,7 +1032,7 @@ namespace Content.Shared.CCVar
         ///     <see cref="ContentTileDefinition.MapAtmosphere"/> set to true.
         /// </summary>
         public static readonly CVarDef<bool> ExplosionCanCreateVacuum =
-            CVarDef.Create("explosion.can_create_vacuum", true, CVar.SERVERONLY);
+            CVarDef.Create("explosion.can_create_vacuum", false, CVar.SERVERONLY);
 
         /*
          * Radiation
@@ -1371,13 +1371,13 @@ namespace Content.Shared.CCVar
         ///     Config for when the restart vote should be allowed to be called based on percentage of ghosts.
         ///
         public static readonly CVarDef<int> VoteRestartGhostPercentage =
-            CVarDef.Create("vote.restart_ghost_percentage", 55, CVar.SERVERONLY);
+            CVarDef.Create("vote.restart_ghost_percentage", 75, CVar.SERVERONLY);
 
         /// <summary>
         ///     See vote.enabled, but specific to preset votes
         /// </summary>
         public static readonly CVarDef<bool> VotePresetEnabled =
-            CVarDef.Create("vote.preset_enabled", true, CVar.SERVERONLY);
+            CVarDef.Create("vote.preset_enabled", false, CVar.SERVERONLY);
 
         /// <summary>
         ///     See vote.enabled, but specific to map votes
@@ -1444,7 +1444,7 @@ namespace Content.Shared.CCVar
         /// Should we pre-load all of the procgen atlasses.
         /// </summary>
         public static readonly CVarDef<bool> ProcgenPreload =
-            CVarDef.Create("procgen.preload", true, CVar.SERVERONLY);
+            CVarDef.Create("procgen.preload", false, CVar.SERVERONLY);
 
         /*
          * Shuttles
@@ -1464,13 +1464,13 @@ namespace Content.Shared.CCVar
         /// Whether the arrivals terminal should be on a planet map.
         /// </summary>
         public static readonly CVarDef<bool> ArrivalsPlanet =
-            CVarDef.Create("shuttle.arrivals_planet", true, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.arrivals_planet", false, CVar.SERVERONLY);
 
         /// <summary>
         /// Whether the arrivals shuttle is enabled.
         /// </summary>
         public static readonly CVarDef<bool> ArrivalsShuttles =
-            CVarDef.Create("shuttle.arrivals", true, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.arrivals", false, CVar.SERVERONLY);
 
         /// <summary>
         /// The map to use for the arrivals station.
@@ -1513,44 +1513,44 @@ namespace Content.Shared.CCVar
         /// Whether to automatically spawn escape shuttles.
         /// </summary>
         public static readonly CVarDef<bool> GridFill =
-            CVarDef.Create("shuttle.grid_fill", true, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.grid_fill", false, CVar.SERVERONLY);
 
         /// <summary>
         /// Whether to automatically preloading grids by GridPreloaderSystem
         /// </summary>
         public static readonly CVarDef<bool> PreloadGrids =
-            CVarDef.Create("shuttle.preload_grids", true, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.preload_grids", false, CVar.SERVERONLY);
 
         /// <summary>
         /// How long the warmup time before FTL start should be.
         /// </summary>
         public static readonly CVarDef<float> FTLStartupTime =
-            CVarDef.Create("shuttle.startup_time", 5.5f, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.startup_time", 10f, CVar.SERVERONLY);
 
         /// <summary>
         /// How long a shuttle spends in FTL.
         /// </summary>
         public static readonly CVarDef<float> FTLTravelTime =
-            CVarDef.Create("shuttle.travel_time", 20f, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.travel_time", 100f, CVar.SERVERONLY);
 
         /// <summary>
         /// How long the final stage of FTL before arrival should be.
         /// </summary>
         public static readonly CVarDef<float> FTLArrivalTime =
-            CVarDef.Create("shuttle.arrival_time", 5f, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.arrival_time", 10f, CVar.SERVERONLY);
 
         /// <summary>
         /// How much time needs to pass before a shuttle can FTL again.
         /// </summary>
         public static readonly CVarDef<float> FTLCooldown =
-            CVarDef.Create("shuttle.cooldown", 10f, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.cooldown", 120f, CVar.SERVERONLY);
 
         /// <summary>
         /// The maximum <see cref="PhysicsComponent.Mass"/> a grid can have before it becomes unable to FTL.
         /// Any value equal to or less than zero will disable this check.
         /// </summary>
         public static readonly CVarDef<float> FTLMassLimit =
-            CVarDef.Create("shuttle.mass_limit", 300f, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.mass_limit", 100000f, CVar.SERVERONLY);
 
         /// <summary>
         /// How long to knock down entities for if they aren't buckled when FTL starts and stops.
@@ -1597,7 +1597,7 @@ namespace Content.Shared.CCVar
         /// Whether the emergency shuttle is enabled or should the round just end.
         /// </summary>
         public static readonly CVarDef<bool> EmergencyShuttleEnabled =
-            CVarDef.Create("shuttle.emergency", true, CVar.SERVERONLY);
+            CVarDef.Create("shuttle.emergency", false, CVar.SERVERONLY);
 
         /// <summary>
         ///     The percentage of time passed from the initial call to when the shuttle can no longer be recalled.
@@ -1864,6 +1864,12 @@ namespace Content.Shared.CCVar
         public static readonly CVarDef<bool> ICShowSSDIndicator =
             CVarDef.Create("ic.show_ssd_indicator", true, CVar.CLIENTONLY);
 
+        /// <summary>
+        /// Controls whether or not suiciding is allowed. This does not control ghosting.
+        /// </summary>
+        public static readonly CVarDef<bool> ICEnableSuicide =
+            CVarDef.Create("ic.enable_suicide", false, CVar.SERVER);
+
         /*
          * Salvage
          */
@@ -2006,7 +2012,7 @@ namespace Content.Shared.CCVar
         /// The time you must spend reading the rules, before the "Request" button is enabled
         /// </summary>
         public static readonly CVarDef<float> GhostRoleTime =
-            CVarDef.Create("ghost.role_time", 3f, CVar.REPLICATED | CVar.SERVER);
+            CVarDef.Create("ghost.role_time", 0f, CVar.REPLICATED | CVar.SERVER);
 
         /// <summary>
         /// If ghost role lotteries should be made near-instanteous.
@@ -2018,7 +2024,7 @@ namespace Content.Shared.CCVar
         /// Whether or not to kill the player's mob on ghosting, when it is in a critical health state.
         /// </summary>
         public static readonly CVarDef<bool> GhostKillCrit =
-            CVarDef.Create("ghost.kill_crit", true, CVar.REPLICATED | CVar.SERVER);
+            CVarDef.Create("ghost.kill_crit", false, CVar.REPLICATED | CVar.SERVER);
 
         /*
          * Fire alarm
@@ -2192,7 +2198,7 @@ namespace Content.Shared.CCVar
          */
 
         public static readonly CVarDef<bool> GatewayGeneratorEnabled =
-            CVarDef.Create("gateway.generator_enabled", true);
+            CVarDef.Create("gateway.generator_enabled", false);
 
         // Clippy!
         public static readonly CVarDef<string> TippyEntity =
@@ -2202,7 +2208,7 @@ namespace Content.Shared.CCVar
         ///     The number of seconds that must pass for a single entity to be able to point at something again.
         /// </summary>
         public static readonly CVarDef<float> PointingCooldownSeconds =
-            CVarDef.Create("pointing.cooldown_seconds", 0.5f, CVar.SERVERONLY);
+            CVarDef.Create("pointing.cooldown_seconds", 1f, CVar.SERVERONLY);
 
         /*
          * DEBUG
@@ -2219,5 +2225,16 @@ namespace Content.Shared.CCVar
         /// </summary>
         public static readonly CVarDef<bool> DebugPow3rDisableParallel =
             CVarDef.Create("debug.pow3r_disable_parallel", true, CVar.SERVERONLY);
+
+        /*
+         * GUIDEBOOK
+         */
+
+        /// <summary>
+        ///     Whether or not to show a button that opens the guidebook when a player changes their species,
+        ///     explaining the difference between each.
+        /// </summary>
+        public static readonly CVarDef<bool> GuidebookShowEditorSpeciesButton =
+            CVarDef.Create("guidebook.show_editor_species_button", false, CVar.SERVER | CVar.REPLICATED);
     }
 }

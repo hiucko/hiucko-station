@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client._RMC14.Webbing;
 using Content.Client.Gameplay;
 using Content.Client.Hands.Systems;
 using Content.Client.Inventory;
@@ -28,13 +29,14 @@ using static Content.Client.Inventory.ClientInventorySystem;
 namespace Content.Client.UserInterface.Systems.Inventory;
 
 public sealed class InventoryUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>,
-    IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>
+    IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>, IOnSystemChanged<WebbingSystem>
 {
     [Dependency] private readonly IEntityManager _entities = default!;
 
     [UISystemDependency] private readonly ClientInventorySystem _inventorySystem = default!;
     [UISystemDependency] private readonly HandsSystem _handsSystem = default!;
     [UISystemDependency] private readonly ContainerSystem _container = default!;
+    [UISystemDependency] private readonly WebbingSystem _webbing = default!;
 
     private EntityUid? _playerUid;
     private InventorySlotsComponent? _playerInventory;
@@ -496,5 +498,20 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
     {
         if (_lastHovered != null)
             UpdateHover(_lastHovered);
+    }
+
+    public void OnSystemLoaded(WebbingSystem system)
+    {
+        system.PlayerWebbingUpdated += OnWebbingUpdated;
+    }
+
+    public void OnSystemUnloaded(WebbingSystem system)
+    {
+        system.PlayerWebbingUpdated -= OnWebbingUpdated;
+    }
+
+    private void OnWebbingUpdated()
+    {
+        UpdateInventoryHotbar(_playerInventory);
     }
 }

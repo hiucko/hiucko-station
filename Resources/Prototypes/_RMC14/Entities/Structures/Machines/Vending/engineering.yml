@@ -1,0 +1,160 @@
+# ENGINEERING
+
+# Tools
+- type: entity
+  parent: CMVendor
+  id: CMVendorTool
+  name: tool storage machine
+  description: A large storage machine containing various tools and devices for general repair.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/tool.rsi
+  - type: VendingMachine
+    pack: CMVendorTool
+    denyState: deny-unshaded
+    ejectState: eject-unshaded
+  - type: AccessReader
+    access: [["CMAccessEngineering"], ["CMAccessColonyEngineering"]]
+
+- type: vendingMachineInventory
+  id: CMVendorTool
+  startingInventory:
+    RMCFlashlight: 4
+    ClothingHeadHatHardhatBlue: 4
+    CMHandsInsulated: 4
+    CMBeltUtility: 4
+    ClothingEyesGlassesMeson: 4
+    ClothingHeadHatWelding: 4
+    trayScanner: 4
+    CMCrowbar: 8
+    CMWelder: 8
+    CMScrewdriver: 8
+    CMWirecutter: 8
+    CMWrench: 8
+
+
+# Circuits
+- type: entity
+  parent: CMVendorTool
+  id: CMVendorCircuits
+  name: circuit board vendor
+  description: A safe storage for pre-programmed circuit boards, it has an internal gyroscope to keep any external force from moving the boards, thick insulation and a custom 2.1mm UPS port for charging various We-Ya exclusive devices (sold separately).
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/robotics.rsi
+  - type: VendingMachine
+    pack: CMVendorCircuits
+
+- type: vendingMachineInventory
+  id: CMVendorCircuits
+  startingInventory:
+    FireAlarmElectronics: 5
+    CMAPCElectronics: 6
+#    CMAutolatheMachineCircuitboard: 2 # TODO RMC14
+    TelecomServerCircuitboard: 1
+    CrewMonitoringComputerCircuitboard: 2
+    IDComputerCircuitboard: 2
+    StationRecordsComputerCircuitboard: 2
+#    CMPortableGeneratorPacmanMachineCircuitBoard: 5
+    CMSMESMachineCircuitboard: 2
+
+
+# Electronics
+- type: entity
+  parent: CMVendorTool
+  id: CMVendorElectronics
+  name: electronics vendor
+  description: Spare tool vendor. What? Did you expect some witty description?
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/engivend.rsi
+  - type: VendingMachine
+    pack: CMVendorElectronics
+
+- type: vendingMachineInventory
+  id: CMVendorElectronics
+  startingInventory:
+    RMCCableCoil: 6
+    CMMultitool: 6
+    DoorElectronics: 8
+    CMAPCElectronics: 8
+    RMCPowerCellHigh: 6
+    RMCPowerCell: 14
+
+
+# Components
+- type: entity
+  parent: CMVendorTool
+  id: CMVendorComponent
+  name: component storage machine
+  description: A large storage machine containing various components.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/engi.rsi
+  - type: VendingMachine
+    pack: CMVendorComponent
+
+- type: vendingMachineInventory
+  id: CMVendorComponent
+  startingInventory:
+    Igniter: 8
+    TimerTrigger: 4
+    ProximitySensor: 4
+    RemoteSignaller: 4
+    RMCBucket: 6
+    CMStockPartMatterBin: 8
+    CMStockPartManipulatorMicro: 8
+    CMStockPartCapacitor: 8
+
+
+# Science
+- type: entity
+  parent: CMVendor
+  id: CMVendorScience
+  name: We-Ya SciVend
+  description: Vendor containing basic equipment for your experiments.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/robotics.rsi
+  - type: VendingMachine
+    pack: CMVendorScience
+    denyState: deny-unshaded
+    ejectState: eject-unshaded
+  - type: AccessReader
+    access: [["CMAccessResearch"]]
+
+- type: vendingMachineInventory
+  id: CMVendorScience
+  startingInventory:
+    ClothingHeadHatHoodBioScientist: 2
+    ClothingOuterBioScientist: 2
+    CMJumpsuitResearch: 2
+    Igniter: 8
+    ProximitySensor: 4
+    RemoteSignaller: 4
+
+
+# Robotics
+- type: entity
+  parent: CMVendorScience
+  id: CMVendorRobotics
+  name: Robotech Deluxe
+  description: All the tools you need to create your own robot army.
+  components:
+  - type: VendingMachine
+    pack: CMVendorRobotics
+
+- type: vendingMachineInventory
+  id: CMVendorRobotics
+  startingInventory:
+    RMCCableCoil: 4
+    SawElectric: 2
+    CMCrowbar: 2
+    CMScalpel: 2
+    CMScrewdriver: 2
+    CMFlash: 4
+    RMCPowerCellHigh: 4
+    ProximitySensor: 4
+    RemoteSignaller: 4
+    CMHealthAnalyzer: 2
+    NitrousOxideTankFilled: 2

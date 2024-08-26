@@ -7,20 +7,20 @@ using Content.Server.Ghost;
 using Content.Server.Popups;
 using Content.Server.PowerCell;
 using Content.Server.Traits.Assorted;
+using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
-using Content.Shared.Interaction.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Medical;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.PowerCell;
 using Content.Shared.Timing;
-using Content.Shared.Toggleable;
+using Content.Shared.Inventory;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
@@ -34,6 +34,7 @@ public sealed class DefibrillatorSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly ChatSystem _chatManager = default!;
+    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly DoAfterSystem _doAfter = default!;
     [Dependency] private readonly ElectrocutionSystem _electrocution = default!;
@@ -47,6 +48,9 @@ public sealed class DefibrillatorSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
+    [Dependency] private readonly CMDefibrillatorSystem _cmDefibrillator = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -64,8 +68,14 @@ public sealed class DefibrillatorSystem : EntitySystem
 
     private void OnDoAfter(EntityUid uid, DefibrillatorComponent component, DefibrillatorZapDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled)
+        if (args.Handled)
             return;
+
+        if (args.Cancelled)
+        {
+            _cmDefibrillator.StopChargingAudio((uid, component));
+            return;
+        }
 
         if (args.Target is not { } target)
             return;
@@ -104,6 +114,24 @@ public sealed class DefibrillatorSystem : EntitySystem
         if (!component.CanDefibCrit && _mobState.IsCritical(target, mobState))
             return false;
 
+        if (TryComp(target, out CMDefibrillatorBlockedComponent? block))
+        {
+            if (user != null)
+                _popup.PopupEntity(Loc.GetString(block.Popup, ("target", target)), uid, user.Value);
+            return false;
+        }
+
+        var slots = _inventory.GetSlotEnumerator(target, SlotFlags.OUTERCLOTHING);
+        while (slots.MoveNext(out var slot))
+        {
+            if (TryComp(slot.ContainedEntity, out CMDefibrillatorBlockedComponent? comp))
+            {
+                if (user != null)
+                    _popup.PopupEntity(Loc.GetString(comp.Popup, ("target", target)), uid, user.Value);
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -115,12 +143,23 @@ public sealed class DefibrillatorSystem : EntitySystem
         if (!CanZap(uid, target, user, component))
             return false;
 
-        _audio.PlayPvs(component.ChargeSound, uid);
+        _cmDefibrillator.StopChargingAudio((uid, component));
+        component.ChargeSoundEntity = _audio.PlayPvs(component.ChargeSound, uid)?.Entity;
+        if (component.ChargeSoundEntity is { } sound)
+        {
+            var audio = EnsureComp<RMCDefibrillatorAudioComponent>(sound);
+#pragma warning disable RA0002
+            audio.Defibrillator = uid;
+#pragma warning restore RA0002
+            Dirty(sound, audio);
+        }
+
         return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.DoAfterDuration, new DefibrillatorZapDoAfterEvent(),
             uid, target, uid)
             {
                 NeedHand = true,
-                BreakOnMove = !component.AllowDoAfterMovement
+                BreakOnMove = !component.AllowDoAfterMovement,
+                DuplicateCondition = DuplicateConditions.SameEvent,
             });
     }
 
@@ -160,7 +199,18 @@ public sealed class DefibrillatorSystem : EntitySystem
         else
         {
             if (_mobState.IsDead(target, mob))
-                _damageable.TryChangeDamage(target, component.ZapHeal, true, origin: uid);
+            {
+                var heal = new DamageSpecifier(component.ZapHeal);
+                if (component.CMZapDamage != null)
+                {
+                    foreach (var (group, amount) in component.CMZapDamage)
+                    {
+                        heal = _rmcDamageable.DistributeHealing(target, group, amount, heal);
+                    }
+                }
+
+                _damageable.TryChangeDamage(target, heal, true, origin: uid);
+            }
 
             if (_mobThreshold.TryGetThresholdForState(target, MobState.Dead, out var threshold) &&
                 TryComp<DamageableComponent>(target, out var damageableComponent) &&

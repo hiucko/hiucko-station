@@ -1,8 +1,8 @@
 - type: species
   id: Vox
   name: species-name-vox
-  roundStart: true
-  prototype: MobVox
+  roundStart: false # sad
+  prototype: CMMobVox
   sprites: MobVoxSprites
   markingLimits: MobVoxMarkingLimits
   dollPrototype: MobVoxDummy
@@ -22,6 +22,8 @@
     Hair: MobHumanoidAnyMarking
     FacialHair: MobHumanoidAnyMarking
     Chest: MobVoxTorso
+    Underwear: MobHumanoidAnyMarking
+    Undershirt: MobHumanoidAnyMarking
     Eyes: MobVoxEyes
     LArm: MobVoxLArm
     RArm: MobVoxRArm

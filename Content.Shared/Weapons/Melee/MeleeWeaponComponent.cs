@@ -13,6 +13,13 @@ namespace Content.Shared.Weapons.Melee;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class MeleeWeaponComponent : Component
 {
+    /// <summary>
+    /// Defines if the primary attack should be a wide swing
+    /// </summary>
+    // TODO RMC14 move this out and reset the file to upstream once source gen is fixed
+    [DataField]
+    public bool WidePrimary;
+
     // TODO: This is becoming bloated as shit.
     // This should just be its own component for alt attacks.
     /// <summary>
@@ -82,7 +89,7 @@ public sealed partial class MeleeWeaponComponent : Component
 
     [DataField]
     [ViewVariables(VVAccess.ReadWrite)]
-    public FixedPoint2 BluntStaminaDamageFactor = FixedPoint2.New(0.5f);
+    public FixedPoint2 BluntStaminaDamageFactor = FixedPoint2.New(0.0f);
 
     /// <summary>
     /// Multiplies damage by this amount for single-target attacks.
