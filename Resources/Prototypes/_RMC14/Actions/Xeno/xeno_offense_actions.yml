@@ -1,0 +1,453 @@
+﻿- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoAcidNormal
+  name: Corrosive Acid (100)  # TODO RMC14 proper plasma costs
+  description: Melts down a structure over time.
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: corrosive_acid
+    event: !type:XenoCorrosiveAcidEvent
+      acidId: XenoAcidNormal
+      plasmaCost: 100
+      time: 225 # seconds or 3.75 minutes
+      dps: 8
+      expendableLightDps: 2.5
+    checkCanInteract: false
+
+- type: entity
+  parent: ActionXenoAcidNormal
+  id: ActionXenoAcidWeak
+  name: Weak Corrosive Acid (75)  # TODO RMC14 proper plasma costs
+  description: Melts down a structure over time.
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: corrosive_acid
+    event: !type:XenoCorrosiveAcidEvent
+      acidId: XenoAcidWeak
+      plasmaCost: 75
+      time: 562.5 # seconds or 9.375 minutes
+      dps: 4
+      expendableLightDps: 0.3
+    checkCanInteract: false
+
+- type: entity
+  parent: ActionXenoAcidNormal
+  id: ActionXenoAcidStrong
+  name: Strong Corrosive Acid (125)  # TODO RMC14 proper plasma costs
+  description: Melts down a structure over time.
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: corrosive_acid
+    event: !type:XenoCorrosiveAcidEvent
+      acidId: XenoAcidStrong
+      plasmaCost: 125
+      time: 90 # seconds or 1.5 minutes
+      dps: 20
+      expendableLightDps: 23.4375
+    checkCanInteract: false
+
+- type: entity
+  id: ActionXenoRegurgitate
+  parent: ActionXenoBase
+  name: Regurgitate
+  description: Eject any devoured marines.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: regurgitate
+    event: !type:XenoRegurgitateActionEvent
+
+- type: entity
+  id: ActionXenoTailStab
+  parent: ActionXenoBase
+  name: Tail Stab
+  description: Launches an attack towards a given direction. The cooldown is faster if you miss.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_attack
+    event: !type:XenoTailStabEvent
+    range: 15
+    useDelay: 10
+    checkCanAccess: false
+  - type: XenoTailStabAction
+
+- type: entity
+  parent: ActionXenoTailStab
+  id: ActionXenoTailStabCorrosive
+  name: Corrosive Tail Stab
+  description: Launches an attack towards a given direction. The cooldown is faster if you miss. [color=red]It also injects diluted molecular acid into the target, dealing damage over time.[/color]
+
+- type: entity
+  id: ActionXenoLeap
+  parent: ActionXenoBase
+  name: Leap
+  description: Jump towards a given location and knock down the first enemy hit.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+    event: !type:XenoLeapActionEvent
+    range: 15
+    useDelay: 3
+    checkCanAccess: false
+
+- type: entity
+  parent: ActionXenoLeap
+  id: ActionXenoPounce
+  name: Pounce (20) # TODO RMC14 proper plasma costs
+  description: Jump towards a given location and knock down the first enemy hit [color=red]if you are invisible.[/color]
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+    event: !type:XenoLeapActionEvent
+    range: 15
+    useDelay: 6
+    checkCanAccess: false
+
+- type: entity
+  id: ActionXenoHeadbutt
+  parent: ActionXenoBase
+  name: Headbutt (10) # TODO RMC14 proper plasma costs
+  description: Charge in a direction and push back any enemies in your way.
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbutt
+    event: !type:XenoHeadbuttActionEvent
+    range: 3
+    useDelay: 6
+    deselectOnMiss: false
+
+- type: entity
+  id: ActionXenoTailSweep
+  parent: ActionXenoBase
+  name: Tail Sweep (10) # TODO RMC14 proper plasma costs
+  description: Knock down any enemies close to you.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_sweep
+    event: !type:XenoTailSweepActionEvent
+    useDelay: 15
+
+- type: entity
+  id: ActionXenoSlowingSpit
+  parent: ActionXenoBase
+  name: Slowing Spit (20) # TODO RMC14 proper plasma costs
+  description: Launches a projectile that will slow the first enemy that it hits, and paralyze them if they have no armor.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    event: !type:XenoSlowingSpitActionEvent
+    useDelay: 1.5
+    range: 15
+    checkCanAccess: false
+
+- type: entity
+  id: ActionXenoScatteredSpit
+  parent: ActionXenoBase
+  name: Scattered Spit (20) # TODO RMC14 proper plasma costs
+  description: Launches multiple projectiles that will briefly paralyze any enemies they hit.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: acid_shotgun
+    event: !type:XenoScatteredSpitActionEvent
+    useDelay: 8
+    range: 15
+    checkCanAccess: false
+
+- type: entity
+  id: ActionXenoSpit
+  parent: ActionXenoBase
+  name: Xeno Spit (25) # TODO RMC14 proper plasma costs
+  description: Launches a projectile that will deal damage to the first enemy that it hits.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    event: !type:XenoSpitActionEvent
+    useDelay: 2
+    range: 15
+    checkCanAccess: false
+
+- type: entity
+  id: ActionXenoChargeSpit
+  parent: ActionXenoBase
+  name: Charge Spit (50) # TODO RMC14 proper plasma costs
+  description: Charges up your next spit, making it deal more damage but have less range.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: charge_spit
+    event: !type:XenoChargeSpitActionEvent # TODO RMC14 more armor, move faster
+    useDelay: 12
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoSprayAcid
+  name: Spray Acid (40)
+  description: Sprays acid along the ground in a line, covering tiles with it. [color=red]Will deal extra damage to barricades and anyone recently hit by a charged spit![/color]
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: spray_acid
+    event: !type:XenoSprayAcidActionEvent
+    useDelay: 8
+    range: 6
+
+- type: entity
+  parent: ActionXenoSprayAcid
+  id: ActionXenoSprayAcidBoiler
+  components:
+  - type: WorldTargetAction
+    useDelay: 10
+  - type: ActionSharedCooldown
+    ids:
+    - ActionXenoAcidShroud
+
+- type: entity
+  id: ActionXenoParalyzingSlash
+  parent: ActionXenoBase
+  name: Paralyzing Slash (50) # TODO RMC14 proper plasma costs
+  description: Temporarily charge up a melee attack that will knockdown the first enemy it hits after a short delay.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: lurker_inject_neuro
+    event: !type:XenoParalyzingSlashActionEvent
+    useDelay: 12
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoCripplingStrike
+  name: Crippling Strike (20) # TODO RMC14 proper plasma costs
+  description: Temporarily charge up a melee attack that will slow the first enemy it hits and do 20% more damage.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: lurker_inject_neuro
+    event: !type:XenoCripplingStrikeActionEvent
+    useDelay: 10
+
+- type: entity
+  id: ActionXenoBoneChips
+  parent: ActionXenoBase
+  name: Bone Chips
+  description: Launch a projectile that will damage and slow down the first enemy it hits.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: runner_bonespur
+    event: !type:XenoBoneChipsActionEvent
+    useDelay: 12
+    range: 15
+
+- type: entity
+  id: ActionXenoPunch
+  parent: ActionXenoBase
+  name: Punch
+  description: Punches the targeted marine dealing a hefty amount of damage as well as slowing the target.
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: punch
+    event: !type:XenoPunchActionEvent
+    range: 1
+    useDelay: 4.5
+    deselectOnMiss: false
+  - type: XenoOffensiveAction
+
+- type: entity
+  id: ActionXenoFling
+  parent: ActionXenoBase
+  name: Fling
+  description: Flings the targeted marine a few tiles and damages them.
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: fling
+    event: !type:XenoFlingActionEvent
+    range: 1
+    useDelay: 7
+    deselectOnMiss: false
+  - type: XenoOffensiveAction
+
+- type: entity
+  id: ActionXenoLunge
+  parent: ActionXenoBase
+  name: Lunge
+  description: Lunges the warrior towards the targeted marine and grabs them.
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: lunge
+    event: !type:XenoLungeActionEvent
+    range: 5
+    useDelay: 10
+    deselectOnMiss: false
+  - type: XenoOffensiveAction
+
+- type: entity
+  id: ActionXenoScreech
+  parent: ActionXenoBase
+  name: Screech (250)
+  description: A wide area of effect stun, screeches upon activation. [color=red]This is blocked by solid walls, smoke, and boiler gas, but not windows![/color]
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+    event: !type:XenoScreechActionEvent
+    useDelay: 50
+
+- type: entity
+  id: ActionXenoGut
+  parent: ActionXenoBase
+  name: Gut (200)
+  description: Gibs the mob you decide to gut.
+  components:
+  - type: EntityTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gut
+    event: !type:XenoGutActionEvent
+    range: 2
+
+- type: entity
+  id: ActionXenoStomp
+  parent: ActionXenoBase
+  name: Stomp (30)
+  description: Slam the ground with a 5x5 AOE slow down that affects all hostiles in range.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+    event: !type:XenoStompActionEvent
+    useDelay: 18
+
+- type: entity
+  id: ActionXenoCharge
+  parent: ActionXenoBase
+  name: Charge (20)
+  description: Click on a tile you want to charge at, after a brief non cancel-able windup time.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ready_charge
+    event: !type:XenoChargeActionEvent
+    range: 9
+    useDelay: 14
+    checkCanAccess: false
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoBombard
+  name: Bombard (200)
+  description: Fire either an acidic glob after a delay. # TODO RMC14 or neurotoxic glob
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: bombard
+    event: !type:XenoBombardActionEvent
+    range: 10
+    checkCanAccess: false
+  - type: ActionSharedCooldown
+    id: ActionXenoBombard
+    ids:
+    - ActionXenoAcidShroud
+    cooldown: 20
+    onPerform: false
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoToggleGasType
+  name: Toggle Gas Type
+  description: Toggle between Acid or Neurotoxic gas types. Your acidic globs will deal continual damage to anything caught in its radius, while neurotoxin will cause targets to suffocate, be slowed down and blinded, alongside eventually knocking them unconscious to be kidnapped.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    backgroundOn: null
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: shift_spit_acid_glob
+    iconOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: shift_spit_neuro_glob
+    event: !type:XenoGasToggleActionEvent
+    useDelay: 1
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoAcidShroud
+  name: Acid Shroud
+  description: Create a small cloud of acid around you to cloak yourself. This will disable your other abilities for a short time to allow you to escape.
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: acid_shroud
+    event: !type:XenoAcidShroudActionEvent
+  - type: ActionSharedCooldown
+    id: ActionXenoAcidShroud
+    ids:
+    - ActionXenoBombard
+    - ActionXenoAcidShroud
+    - ActionXenoSprayAcidBoiler
+    cooldown: 30
+    onPerform: false

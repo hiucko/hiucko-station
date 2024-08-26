@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.UserInterface.Systems.MenuBar.Widgets;
+using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Tag;
 using Content.Shared.Whitelist;
@@ -11,7 +12,6 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.Utility;
 using Robust.Shared.Enums;
-using Robust.Shared.Graphics;
 using Robust.Shared.Prototypes;
 using static Robust.Client.UserInterface.Controls.BaseButton;
 
@@ -165,7 +165,7 @@ namespace Content.Client.Construction.UI
             else
                 _selectedCategory = category;
 
-            foreach (var recipe in _prototypeManager.EnumeratePrototypes<ConstructionPrototype>())
+            foreach (var recipe in _prototypeManager.EnumerateCM<ConstructionPrototype>())
             {
                 if (recipe.Hide)
                     continue;
@@ -213,7 +213,7 @@ namespace Content.Client.Construction.UI
         {
             var uniqueCategories = new HashSet<string>();
 
-            foreach (var prototype in _prototypeManager.EnumeratePrototypes<ConstructionPrototype>())
+            foreach (var prototype in _prototypeManager.EnumerateCM<ConstructionPrototype>())
             {
                 var category = prototype.Category;
 

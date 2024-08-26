@@ -1,8 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Content.Client.Popups;
+using Content.Shared._RMC14.Construction;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
-using Content.Shared.Construction.Steps;
 using Content.Shared.Examine;
 using Content.Shared.Input;
 using Content.Shared.Interaction;
@@ -29,6 +29,7 @@ namespace Content.Client.Construction
         [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
         [Dependency] private readonly SharedTransformSystem _transformSystem = default!;
         [Dependency] private readonly PopupSystem _popupSystem = default!;
+        [Dependency] private readonly RMCConstructionSystem _rmcConstruction = default!;
 
         private readonly Dictionary<int, EntityUid> _ghosts = new();
         private readonly Dictionary<string, ConstructionGuide> _guideCache = new();
@@ -123,6 +124,9 @@ namespace Content.Client.Construction
         private void HandlePlayerAttached(LocalPlayerAttachedEvent msg)
         {
             var available = IsCraftingAvailable(msg.Entity);
+            if (!_rmcConstruction.CanConstruct(msg.Entity))
+                available = false;
+
             UpdateCraftingAvailability(available);
         }
 
@@ -227,6 +231,17 @@ namespace Content.Client.Construction
         private bool CheckConstructionConditions(ConstructionPrototype prototype, EntityCoordinates loc, Direction dir,
             EntityUid user, bool showPopup = false)
         {
+            var attempt = new RMCConstructionAttemptEvent(loc, prototype.Name);
+            RaiseLocalEvent(ref attempt);
+
+            if (attempt.Cancelled)
+            {
+                if (attempt.Popup is { } popup)
+                    _popupSystem.PopupCoordinates(popup, loc);
+
+                return false;
+            }
+
             foreach (var condition in prototype.Conditions)
             {
                 if (!condition.Condition(user, loc, dir))

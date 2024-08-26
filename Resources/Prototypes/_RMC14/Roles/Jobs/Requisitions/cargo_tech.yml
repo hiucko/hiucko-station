@@ -1,0 +1,50 @@
+- type: job
+  parent: CMJobBase
+  id: CMCargoTech
+  name: cm-job-name-cargotech
+  description: cm-job-description-cargotech
+  playTimeTracker: CMJobCargoTech
+  startingGear: CMGearCargoTech
+  icon: "CMJobIconCargoTech"
+  joinNotifyCrew: false
+  supervisors: cm-job-supervisors-qm
+  accessGroups:
+  - CMCargoTech
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 1
+        RMCSkillFirearms: 1
+        RMCSkillPowerLoader: 2
+
+- type: startingGear
+  id: CMGearCargoTech
+  equipment:
+    jumpsuit: CMJumpsuitCargoTech
+    back: CMSatchelMarineTech
+    shoes: CMBootsBlack
+    head: CMHeadCapCargo
+    gloves: CMHandsInsulated
+    id: CMIDCardCargoTech
+    ears: CMHeadsetRequisition
+    pocket1: RMCPouchGeneralMedium
+    pocket2: CMStampApproved
+#    belt: TODO RMC14 M276 Pattern General Pistol Holster Rig Filled
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMSpawnPointCargoTech
+  name: cargo tech spawn point
+  components:
+  - type: SpawnPoint
+    job_id: CMCargoTech
+  - type: Sprite
+    layers:
+    - sprite: Markers/jobs.rsi
+      state: green
+    - state: cargo_tech
+
+- type: playTimeTracker
+  id: CMJobCargoTech

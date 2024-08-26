@@ -1,13 +1,11 @@
+using Content.Server._RMC14.Dropship;
 using Content.Server.Administration.Logs;
 using Content.Server.Body.Systems;
-using Content.Server.Doors.Systems;
 using Content.Server.Parallax;
 using Content.Server.Procedural;
 using Content.Server.Shuttles.Components;
 using Content.Server.Station.Systems;
 using Content.Server.Stunnable;
-using Content.Shared.GameTicking;
-using Content.Shared.Mobs.Systems;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Throwing;
 using JetBrains.Annotations;
@@ -58,6 +56,7 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly ThrusterSystem _thruster = default!;
     [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
+    [Dependency] private readonly DropshipSystem _dropship = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
 

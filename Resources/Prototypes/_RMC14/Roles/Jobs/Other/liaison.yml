@@ -1,0 +1,51 @@
+﻿- type: job
+  parent: CMJobBase
+  id: CMLiaison
+  name: cm-job-name-liaison
+  description: cm-job-description-liaison
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMDepartmentsHuman
+    time: 36000 # 10 hours
+  playTimeTracker: CMJobLiaison
+  startingGear: CMGearLiaison
+  icon: "CMJobIconLiaison"
+  joinNotifyCrew: false
+  supervisors: cm-job-supervisors-we-ya
+  accessGroups:
+  - MarineMain
+  - RMCWeYa
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 0
+        RMCSkillVehicles: 1
+    - type: CMVendorUser
+      points: 50
+
+- type: startingGear
+  id: CMGearLiaison
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    back: CMSatchel
+    shoes: RMCShoesLaceup
+    id: CMIDCardLiaison
+    ears: RMCHeadsetLiaison
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMSpawnPointLiaison
+  name: liaison spawn point
+  components:
+  - type: SpawnPoint
+    job_id: CMLiaison
+  - type: Sprite
+    layers:
+    - sprite: Markers/jobs.rsi
+      state: green
+    - state: corp_liaison
+
+- type: playTimeTracker
+  id: CMJobLiaison

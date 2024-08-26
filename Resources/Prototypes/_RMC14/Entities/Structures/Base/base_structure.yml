@@ -1,0 +1,164 @@
+﻿- type: entity
+  parent: BaseStructure
+  id: CMBaseStructure
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+
+- type: entity
+  parent:
+  - CMBaseStructure
+  - CMCorrodible
+  id: CMBaseStructureCorrodible
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+
+- type: entity
+  parent: BaseStructure
+  id: CMBaseXenoStructure
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Corrodible
+    isCorrodible: false
+  - type: CMIconSmooth
+  - type: MeleeReceivedMultiplier
+    otherMultiplier: 8.2
+  - type: XenoConstructionSupport
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: XenoResinBreak
+  - type: XenoConstruct
+  - type: RMCWallExplosionDeletable
+  - type: NpcFactionMember
+    factions:
+    - RMCXeno
+  - type: RMCNightVisionVisible
+    priority: -1
+    transparency: 0.2
+  - type: InvulnerabilityTime
+    whitelist:
+      components:
+      - Marine
+    hitsToInvulnerability: 3
+
+- type: entity
+  id: CMCorrodible
+  abstract: true
+  components:
+  - type: Corrodible
+
+# BaseWall
+- type: entity
+  abstract: true
+  id: CMBaseWallInvincible
+  description: A huge chunk of metal used to separate rooms.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    drawdepth: Walls
+  - type: Icon
+    state: full
+  - type: PlacementReplacement
+    key: walls
+  - type: Occluder
+  - type: Airtight
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: XenoWeedable
+    spawn: XenoWeedsWall
+  - type: XenoConstructionSupport
+  - type: RMCDropshipBlocked
+
+- type: entity
+  abstract: true
+  parent: CMBaseWallInvincible
+  id: CMBaseWall
+  description: A huge chunk of metal used to separate rooms.
+  components:
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: Corrodible
+    isCorrodible: true
+  - type: Clickable
+  - type: RMCWallExplosionDeletable
+  - type: DamageMultiplierFlags
+    flags: Turf
+
+- type: entity
+  parent:
+  - BaseWall
+  - CMBaseXenoStructure
+  id: CMBaseWallXeno
+  name: resin wall
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Damageable
+    damageContainer: StructuralXeno
+    damageModifierSet: Resin
+  - type: Appearance
+  - type: RadiationBlocker
+    resistance: 5
+  - type: PlacementReplacement
+    key: walls
+  - type: ExplosionResistance
+    damageCoefficient: 12.5 # Walls take 15x explosive damage, resin walls reduce that by 15%
+  - type: DamageMultiplierFlags
+    flags: Turf
+
+# Invisible Wall
+
+- type: entity
+  id: RMCWallInvisibleBulletPassible
+  name: wall blocker
+  suffix: Projectile Passible
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: PlacementReplacement
+    key: walls
+  - type: Occluder
+    enabled: false
+  - type: Airtight
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - HighImpassable
+        - MidImpassable
+        - LowImpassable
+        - InteractImpassable
+        density: 1000
+  - type: RMCDropshipBlocked
+

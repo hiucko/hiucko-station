@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client._RMC14.Storage;
 using Content.Client.Items.Systems;
 using Content.Shared.Item;
 using Content.Shared.Storage;
@@ -108,7 +109,13 @@ public sealed class ItemGridPiece : Control, IEntityControl
         if (_storageController.IsDragging && _storageController.DraggingGhost?.Entity == Entity && _storageController.DraggingGhost != this)
             return;
 
-        var adjustedShape = _entityManager.System<ItemSystem>().GetAdjustedItemShape((Entity, itemComponent), Location.Rotation, Vector2i.Zero);
+        if (_storageController._container?.StorageEntity is not { } storage ||
+            !_entityManager.TryGetComponent(storage, out StorageComponent? storageComp))
+        {
+            return;
+        }
+
+        var adjustedShape = _entityManager.System<ItemSystem>().GetAdjustedItemShape((storage, storageComp), (Entity, itemComponent), Location.Rotation, Vector2i.Zero);
         var boundingGrid = adjustedShape.GetBoundingBox();
         var size = _centerTexture!.Size * 2 * UIScale;
 
@@ -206,6 +213,8 @@ public sealed class ItemGridPiece : Control, IEntityControl
                 handle.DrawTextureRect(markedTexture, new UIBox2(markedPos, markedPos + size));
             }
         }
+
+        _entityManager.System<RMCIconLabelsSystem>().DrawStorage(Entity, UIScale, iconPosition, handle);
     }
 
     protected override bool HasPoint(Vector2 point)
@@ -219,6 +228,11 @@ public sealed class ItemGridPiece : Control, IEntityControl
         }
 
         return false;
+    }
+
+    public bool Has(Vector2 point)
+    {
+        return HasPoint(point);
     }
 
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
@@ -281,9 +295,9 @@ public sealed class ItemGridPiece : Control, IEntityControl
         }
     }
 
-    public static Vector2 GetCenterOffset(Entity<ItemComponent?> entity, ItemStorageLocation location, IEntityManager entMan)
+    public static Vector2 GetCenterOffset(Entity<StorageComponent?> storage, Entity<ItemComponent?> entity, ItemStorageLocation location, IEntityManager entMan)
     {
-        var boxSize = entMan.System<ItemSystem>().GetAdjustedItemShape(entity, location).GetBoundingBox().Size;
+        var boxSize = entMan.System<ItemSystem>().GetAdjustedItemShape(storage, entity, location).GetBoundingBox().Size;
         var actualSize = new Vector2(boxSize.X + 1, boxSize.Y + 1);
         return actualSize * new Vector2i(8, 8);
     }

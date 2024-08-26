@@ -1,0 +1,58 @@
+﻿- type: job
+  parent: CMJobBase
+  id: CMPilotDropship
+  name: cm-job-name-dropship-pilot
+  description: cm-job-description-dropship-pilot
+  playTimeTracker: CMJobPilotDropship
+  requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMJobsDropship
+    time: 7200 # 2 hours
+  startingGear: CMGearPilotDropship
+  icon: "CMJobIconPilotDropship"
+  joinNotifyCrew: false
+  supervisors: cm-job-supervisors-aso
+  accessGroups:
+  - Pilot
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 1
+        RMCSkillIntel: 1
+        RMCSkillJtac: 2
+        RMCSkillLeadership: 1
+        RMCSkillMedical: 2
+        RMCSkillOverwatch: 1
+        RMCSkillPilot: 2
+        RMCSkillPowerLoader: 2
+        RMCSkillSurgery: 1
+    - type: MarineOrders
+    - type: CMVendorUser
+      points: 45
+
+- type: startingGear
+  id: CMGearPilotDropship
+  equipment:
+    jumpsuit: CMJumpsuitPilot
+    back: CMSatchel
+    shoes: CMBootsBlackFilled
+    id: CMIDCardPilotDropship
+    ears: CMHeadsetPilot
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMSpawnPointPilotDropship
+  name: dropship pilot spawn point
+  components:
+  - type: SpawnPoint
+    job_id: CMPilotDropship
+  - type: Sprite
+    layers:
+    - sprite: Markers/jobs.rsi
+      state: green
+    - state: pilot
+
+- type: playTimeTracker
+  id: CMJobPilotDropship
