@@ -437,6 +437,7 @@
     - ChemMasterMachineCircuitboard
     - CondenserMachineCircuitBoard
     - HotplateMachineCircuitboard
+    - PrinterDocMachineCircuitboard # Corvax-Printer
     - UniformPrinterMachineCircuitboard
     - FloorGreenCircuit
     - FloorBlueCircuit
@@ -1120,6 +1121,19 @@
       - CarpetPurple
       - CarpetCyan
       - CarpetWhite
+      # Corvax-Clothing-Start
+      - ClothingHeadHatCapHoS
+      - ClothingHeadHatBeretSecurityMedic
+      - ClothingHeadHatCapWardenAlt
+      - ClothingUniformJumpsuitCapTurtleneck
+      - ClothingUniformJumpskirtCapTurtleneck
+      - ClothingUniformJumpsuitHoSBlack
+      - ClothingUniformJumpskirtHoSBlack
+      - ClothingUniformJumpsuitHoPTurtleneck
+      - ClothingUniformJumpskirtHoPTurtleneck
+      - ClothingUniformJumpsuitRDClassical
+      - ClothingUniformJumpskirtRDClassical
+      # Corvax-Clothing-End
   - type: EmagLatheRecipes
     emagStaticRecipes:
       - ClothingHeadHatCentcomcap

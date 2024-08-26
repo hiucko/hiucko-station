@@ -72,7 +72,9 @@
   - type: StationEvent
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/Announcements/announce.ogg
+      path: /Audio/Corvax/Announcements/flux.ogg # Corvax-Announcements
+      params:
+        volume: -4
     weight: 8
     duration: 35
   - type: AnomalySpawnRule
@@ -88,7 +90,9 @@
   - type: StationEvent
     startAnnouncementColor: "#18abf5"
     startAudio:
-      path: /Audio/Announcements/announce.ogg
+      path: /Audio/Corvax/Announcements/blusp_anomalies.ogg # Corvax-Announcements
+      params:
+        volume: -4
     weight: 8
     duration: 35
   - type: BluespaceArtifactRule
@@ -255,9 +259,15 @@
   - type: StationEvent
     startAnnouncement: station-event-gas-leak-start-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/Announcements/gasleak_start.ogg # Corvax-Announcements
+      params:
+        volume: -4
     endAnnouncement: station-event-gas-leak-end-announcement
     weight: 8
+    endAudio:
+      path: /Audio/Announcements/gasleak_end.ogg # Corvax-Announcements
+      params:
+        volume: -4
   - type: GasLeakRule
 
 - type: entity
@@ -361,8 +371,10 @@
     weight: 8
     startAnnouncement: station-event-solar-flare-start-announcement
     endAnnouncement: station-event-solar-flare-end-announcement
-    startAudio:
-      path: /Audio/Announcements/attention.ogg
+    startAudio: # Corvax-Announcements
+      path: /Audio/Corvax/Announcements/comms_blackout.ogg
+      params:
+        volume: -4
     duration: 120
     maxDuration: 240
   - type: SolarFlareRule
@@ -388,7 +400,9 @@
   - type: StationEvent
     startAnnouncement: station-event-vent-clog-start-announcement
     startAudio:
-      path: /Audio/Announcements/attention.ogg
+      path: /Audio/Announcements/ventclog.ogg # Corvax-Announcements
+      params:
+        volume: -4
     earliestStart: 15
     minimumPlayers: 15
     weight: 5
@@ -480,6 +494,11 @@
       - type: ZombifyOnDeath
       - type: IncurableZombie
       - type: InitialInfected
+      # Corvax-Не знаю какой тег, морти поправь
+      - type: NpcFactionMember
+        addFriendlyFactions:
+        - Zombie
+      # Corvax
       mindComponents:
       - type: InitialInfectedRole
         prototype: InitialInfected

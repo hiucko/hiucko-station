@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Content.Server.Access.Systems;
 using Content.Server.DetailExaminable;
 using Content.Server.Humanoid;

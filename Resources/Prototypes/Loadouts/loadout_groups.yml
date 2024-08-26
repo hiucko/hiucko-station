@@ -5,6 +5,7 @@
   minLimit: 0
   maxLimit: 3
   loadouts:
+  - SpaceLaw # Corvax-HyperLink
   - PlushieLizard
   - PlushieSpaceLizard
   - Lighter
@@ -25,7 +26,17 @@
   - ClothingNeckTransPin
   - ClothingNeckAutismPin
   - ClothingNeckGoldAutismPin
-
+   # Corvax-Loadouts-Start
+  - ClothingNeckAtharaPin
+  - ClothingNeckCorvaxPin
+  - ClothingNeckEchoPin
+  - ClothingNeckElysiumPin
+  - ClothingNeckMainPin
+  - ClothingNeckNebulaPin
+  - ClothingNeckNovaPin
+  - ClothingNeckSolarisPin
+  - ClothingNeckWhiteListPin
+  # Corvax-Loadouts-End
 - type: loadoutGroup
   id: Glasses
   name: loadout-group-glasses
@@ -78,6 +89,10 @@
   - CaptainJumpskirt
   - CaptainFormalSuit
   - CaptainFormalSkirt
+  # Corvax-Loadouts-Start
+  - CaptainJumpsuitTurtleneck
+  - CaptainJumpskirtTurtleneck
+  # Corvax-Loadouts-End
 
 - type: loadoutGroup
   id: CaptainNeck
@@ -116,6 +131,10 @@
   loadouts:
   - HoPJumpsuit
   - HoPJumpskirt
+  # Corvax-Loadouts-Start
+  - HoPJumpsuitTurtleneck
+  - HoPJumpskirtTurtleneck
+  # Corvax-Loadouts-End
 
 - type: loadoutGroup
   id: HoPNeck
@@ -798,6 +817,10 @@
   loadouts:
   - ResearchDirectorJumpsuit
   - ResearchDirectorJumpskirt
+  # Corvax-Loadouts-Start
+  - ResearchDirectorJumpsuitClassical
+  - ResearchDirectorJumpskirtClassical
+  # Corvax-Loadouts-End
 
 - type: loadoutGroup
   id: ResearchDirectorOuterClothing
@@ -911,6 +934,10 @@
   - HeadofSecurityTurtleneckSkirt
   - HeadofSecurityFormalSuit
   - HeadofSecurityFormalSkirt
+  # Corvax-Loadouts-Start
+  - HeadofSecurityJumpsuitBlack
+  - HeadofSecurityJumpskirtBlack
+  # Corvax-Loadouts-End
 
 - type: loadoutGroup
   id: HeadofSecurityNeck
@@ -996,6 +1023,7 @@
   id: SecurityShoes
   name: loadout-group-security-shoes
   loadouts:
+  - JackSecBoots # Corvax
   - JackBoots
   - SecurityWinterBoots
 

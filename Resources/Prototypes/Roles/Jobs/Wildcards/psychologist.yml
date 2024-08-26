@@ -18,6 +18,7 @@
     shoes: ClothingShoesLeather
     id: PsychologistPDA
     ears: ClothingHeadsetMedical
-  #storage:
-    #back:
-    #- Stuff
+  storage:
+    back:
+#    - BoxSurvivalMedical
+    - RubberStampPsychologist # Corvax-MRP

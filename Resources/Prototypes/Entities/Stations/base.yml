@@ -54,7 +54,7 @@
             - /Maps/Shuttles/trading_outpost.yml
         mining: !type:GridSpawnGroup
           paths:
-          - /Maps/Shuttles/mining.yml
+          - /Maps/Shuttles/corvax_mining.yml # Corvax-Mapping
         # Spawn last
         ruins: !type:GridSpawnGroup
           hide: true
@@ -89,6 +89,7 @@
   abstract: true
   components:
     - type: StationCentcomm
+      map: "/Maps/corvax_centcomm.yml" # Corvax-Mapping
 
 - type: entity
   id: BaseStationEvacuation

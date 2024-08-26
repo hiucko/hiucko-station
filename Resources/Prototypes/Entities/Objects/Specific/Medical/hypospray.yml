@@ -423,9 +423,11 @@
         maxVol: 10
   - type: RefillableSolution
     solution: hypospray
-  - type: ExaminableSolution
-    solution: hypospray
-    heldOnly: true # Allow examination only when held in hand.
+# Corvax-HiddenDesc-Start
+  #- type: ExaminableSolution
+  #  solution: hypospray
+  #  heldOnly: true # Allow examination only when held in hand.
+# Corvax-HiddenDesc-End
   - type: Hypospray
     onlyAffectsMobs: false
   - type: UseDelay
@@ -434,6 +436,21 @@
     price: 75
   - type: EmitSoundOnUse
     handle: false # don't want the sound to stop the self-inject from triggering
+# Corvax-HiddenDesc-Start
+  - type: HiddenDescription
+    entries:
+    - label: corvax-hidden-desc-Hypopen-syndicate
+      whitelistMind:
+        components:
+          - TraitorRole
+          - NukeOperative
+    - label: corvax-hidden-desc-Hypopen-research
+      jobRequired:
+        - ResearchAssistant
+        - ResearchDirector
+        - Scientist
+        - Borg
+# Corvax-HiddenDesc-End
 
 - type: entity
   parent: [ BaseItem, BaseSyndicateContraband ]

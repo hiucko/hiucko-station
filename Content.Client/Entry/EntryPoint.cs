@@ -2,6 +2,8 @@ using Content.Client.Administration.Managers;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
 using Content.Client.DebugMon;
+using Content.Client.Corvax.TTS;
+using Content.Client.Options;
 using Content.Client.Eui;
 using Content.Client.Fullscreen;
 using Content.Client.GhostKick;
@@ -118,6 +120,7 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("wireLayout");
             _prototypeManager.RegisterIgnore("alertLevels");
             _prototypeManager.RegisterIgnore("nukeopsRole");
+            _prototypeManager.RegisterIgnore("stationGoal"); // Corvax-StationGoal
             _prototypeManager.RegisterIgnore("ghostRoleRaffleDecider");
 
             _componentFactory.GenerateNetIds();
