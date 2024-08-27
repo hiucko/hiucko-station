@@ -25,7 +25,7 @@ public sealed class HumanoidVoicelinesSystem : EntitySystem
         [ArachnidSpecies] = RMCCVars.CMPlayVoicelinesArachnid,
         [DionaSpecies] = RMCCVars.CMPlayVoicelinesDiona,
         [DwarfSpecies] = RMCCVars.CMPlayVoicelinesDwarf,
-        [FelinidSpecies] = RMCCVars.CMPlayVoicelinesFelinid,
+        //[FelinidSpecies] = RMCCVars.CMPlayVoicelinesFelinid, //if ccvar exists but isnt used, its not a big problem :clueless:
         [HumanSpecies] = RMCCVars.CMPlayVoicelinesHuman,
         [MothSpecies] = RMCCVars.CMPlayVoicelinesMoth,
         [ReptilianSpecies] = RMCCVars.CMPlayVoicelinesReptilian,
