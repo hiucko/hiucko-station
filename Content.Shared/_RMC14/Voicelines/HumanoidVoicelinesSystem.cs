@@ -14,7 +14,7 @@ public sealed class HumanoidVoicelinesSystem : EntitySystem
     private static readonly ProtoId<SpeciesPrototype> ArachnidSpecies = "Arachnid";
     private static readonly ProtoId<SpeciesPrototype> DionaSpecies = "Diona";
     private static readonly ProtoId<SpeciesPrototype> DwarfSpecies = "Dwarf";
-    private static readonly ProtoId<SpeciesPrototype> FelinidSpecies = "Felinid";
+    // private static readonly ProtoId<SpeciesPrototype> FelinidSpecies = "Felinid";
     private static readonly ProtoId<SpeciesPrototype> HumanSpecies = "Human";
     private static readonly ProtoId<SpeciesPrototype> MothSpecies = "Moth";
     private static readonly ProtoId<SpeciesPrototype> ReptilianSpecies = "Reptilian";
