@@ -1,4 +1,4 @@
-using System.Numerics;
+﻿using System.Numerics;
 using Content.Shared.Movement.Systems;
 
 namespace Content.Shared.Camera;

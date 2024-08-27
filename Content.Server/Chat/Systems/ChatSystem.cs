@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Content.Server._RMC14.Chat.Chat;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -18,7 +19,6 @@ using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
-using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
@@ -63,6 +63,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private readonly ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private readonly ExamineSystemShared _examineSystem = default!;
+    [Dependency] private readonly CMChatSystem _cmChat = default!;
 
     public const int VoiceRange = 10; // how far voice goes in world units
     public const int WhisperClearRange = 2; // how far whisper goes while still being understandable, in world units
@@ -749,7 +750,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     private string SanitizeInGameICMessage(EntityUid source, string message, out string? emoteStr, bool capitalize = true, bool punctuate = false, bool capitalizeTheWordI = true)
     {
         var newMessage = message.Trim();
-        newMessage = SanitizeMessageReplaceWords(newMessage);
+        newMessage = SanitizeMessageReplaceWords(source, newMessage);
 
         if (capitalize)
             newMessage = SanitizeMessageCapital(newMessage);
@@ -812,13 +813,14 @@ public sealed partial class ChatSystem : SharedChatSystem
     [ValidatePrototypeId<ReplacementAccentPrototype>]
     public const string ChatSanitize_Accent = "chatsanitize";
 
-    public string SanitizeMessageReplaceWords(string message)
+    public string SanitizeMessageReplaceWords(EntityUid source, string message)
     {
         if (string.IsNullOrEmpty(message)) return message;
 
         var msg = message;
 
         msg = _wordreplacement.ApplyReplacements(msg, ChatSanitize_Accent);
+        msg = _cmChat.SanitizeMessageReplaceWords(source, msg);
 
         return msg;
     }
@@ -862,6 +864,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
 
         RaiseLocalEvent(new ExpandICChatRecipientsEvent(source, voiceGetRange, recipients));
+
+        var ev = new ChatMessageAfterGetRecipients(recipients);
+        RaiseLocalEvent(source, ref ev);
         return recipients;
     }
 

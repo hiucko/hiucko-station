@@ -1,6 +1,9 @@
+using System.Linq;
+using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.CombatMode.Disarm;
 using Content.Server.Movement.Systems;
+using Content.Shared._RMC14.Tackle;
 using Content.Shared.Actions.Events;
 using Content.Shared.Administration.Components;
 using Content.Shared.CombatMode;
@@ -21,8 +24,6 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
-using System.Linq;
-using System.Numerics;
 
 namespace Content.Server.Weapons.Melee;
 
@@ -91,6 +92,13 @@ public sealed class MeleeWeaponSystem : SharedMeleeWeaponSystem
         }
 
         var target = GetEntity(ev.Target!.Value);
+        if (InRange(user, target, component.Range, session))
+        {
+            var cmDisarmEvent = new CMDisarmEvent(user);
+            RaiseLocalEvent(target, ref cmDisarmEvent);
+            if (cmDisarmEvent.Handled)
+                return true;
+        }
 
         if (_mobState.IsIncapacitated(target))
         {

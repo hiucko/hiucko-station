@@ -1,5 +1,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
+using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.NamedItems;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
@@ -104,6 +106,12 @@ namespace Content.Shared.Preferences
         public SpawnPriorityPreference SpawnPriority { get; private set; } = SpawnPriorityPreference.None;
 
         /// <summary>
+        /// When spawning into a squad role, what squad is preferred.
+        /// </summary>
+        [DataField]
+        public EntProtoId<SquadTeamComponent>? SquadPreference { get; private set; }
+
+        /// <summary>
         /// <see cref="_jobPriorities"/>
         /// </summary>
         public IReadOnlyDictionary<ProtoId<JobPrototype>, JobPriority> JobPriorities => _jobPriorities;
@@ -125,6 +133,9 @@ namespace Content.Shared.Preferences
         public PreferenceUnavailableMode PreferenceUnavailable { get; private set; } =
             PreferenceUnavailableMode.SpawnAsOverflow;
 
+        [DataField]
+        public SharedRMCNamedItems NamedItems { get; private set; } = new();
+
         public HumanoidCharacterProfile(
             string name,
             string flavortext,
@@ -134,11 +145,13 @@ namespace Content.Shared.Preferences
             Gender gender,
             HumanoidCharacterAppearance appearance,
             SpawnPriorityPreference spawnPriority,
+            EntProtoId<SquadTeamComponent>? squadPreference,
             Dictionary<ProtoId<JobPrototype>, JobPriority> jobPriorities,
             PreferenceUnavailableMode preferenceUnavailable,
             HashSet<ProtoId<AntagPrototype>> antagPreferences,
             HashSet<ProtoId<TraitPrototype>> traitPreferences,
-            Dictionary<string, RoleLoadout> loadouts)
+            Dictionary<string, RoleLoadout> loadouts,
+            SharedRMCNamedItems namedItems)
         {
             Name = name;
             FlavorText = flavortext;
@@ -148,6 +161,7 @@ namespace Content.Shared.Preferences
             Gender = gender;
             Appearance = appearance;
             SpawnPriority = spawnPriority;
+            SquadPreference = squadPreference;
             _jobPriorities = jobPriorities;
             PreferenceUnavailable = preferenceUnavailable;
             _antagPreferences = antagPreferences;
@@ -167,6 +181,8 @@ namespace Content.Shared.Preferences
 
                 hasHighPrority = true;
             }
+
+            NamedItems = namedItems;
         }
 
         /// <summary>Copy constructor</summary>
@@ -179,11 +195,13 @@ namespace Content.Shared.Preferences
                 other.Gender,
                 other.Appearance.Clone(),
                 other.SpawnPriority,
+                other.SquadPreference,
                 new Dictionary<ProtoId<JobPrototype>, JobPriority>(other.JobPriorities),
                 other.PreferenceUnavailable,
                 new HashSet<ProtoId<AntagPrototype>>(other.AntagPreferences),
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
-                new Dictionary<string, RoleLoadout>(other.Loadouts))
+                new Dictionary<string, RoleLoadout>(other.Loadouts),
+                other.NamedItems)
         {
         }
 
@@ -301,6 +319,11 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithSpawnPriorityPreference(SpawnPriorityPreference spawnPriority)
         {
             return new(this) { SpawnPriority = spawnPriority };
+        }
+
+        public HumanoidCharacterProfile WithSquadPreference(EntProtoId<SquadTeamComponent>? squadPreference)
+        {
+            return new(this) { SquadPreference = squadPreference };
         }
 
         public HumanoidCharacterProfile WithJobPriorities(IEnumerable<KeyValuePair<ProtoId<JobPrototype>, JobPriority>> jobPriorities)
@@ -464,11 +487,13 @@ namespace Content.Shared.Preferences
             if (Species != other.Species) return false;
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             if (SpawnPriority != other.SpawnPriority) return false;
+            if (SquadPreference != other.SquadPreference) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
             if (!_antagPreferences.SequenceEqual(other._antagPreferences)) return false;
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
+            if (NamedItems != other.NamedItems) return false;
             return Appearance.MemberwiseEquals(other.Appearance);
         }
 
@@ -476,6 +501,7 @@ namespace Content.Shared.Preferences
         {
             var configManager = collection.Resolve<IConfigurationManager>();
             var prototypeManager = collection.Resolve<IPrototypeManager>();
+            var compFactory = collection.Resolve<IComponentFactory>();
 
             if (!prototypeManager.TryIndex(Species, out var speciesPrototype) || speciesPrototype.RoundStart == false)
             {
@@ -602,6 +628,13 @@ namespace Content.Shared.Preferences
             Appearance = appearance;
             SpawnPriority = spawnPriority;
 
+            if (!prototypeManager.TryIndex(SquadPreference, out var squad) ||
+                !squad.TryGetComponent(out SquadTeamComponent? team, compFactory) ||
+                !team.RoundStart)
+            {
+                SquadPreference = null;
+            }
+
             _jobPriorities.Clear();
 
             foreach (var (job, priority) in priorities)
@@ -635,6 +668,19 @@ namespace Content.Shared.Preferences
             {
                 _loadouts.Remove(value);
             }
+
+            string? ValidateNamedItem(string? itemName)
+            {
+                return itemName?.Length > 20 ? itemName[..20] : itemName;
+            }
+
+            NamedItems = new SharedRMCNamedItems
+            {
+                PrimaryGunName = ValidateNamedItem(NamedItems.PrimaryGunName),
+                SidearmName = ValidateNamedItem(NamedItems.SidearmName),
+                HelmetName = ValidateNamedItem(NamedItems.HelmetName),
+                ArmorName = ValidateNamedItem(NamedItems.ArmorName),
+            };
         }
 
         /// <summary>
@@ -711,7 +757,9 @@ namespace Content.Shared.Preferences
             hashCode.Add((int)Gender);
             hashCode.Add(Appearance);
             hashCode.Add((int)SpawnPriority);
+            hashCode.Add(SquadPreference);
             hashCode.Add((int)PreferenceUnavailable);
+            hashCode.Add(NamedItems);
             return hashCode.ToHashCode();
         }
 
@@ -749,6 +797,13 @@ namespace Content.Shared.Preferences
 
             loadout.SetDefault(this, session, protoManager);
             return loadout;
+        }
+
+        public HumanoidCharacterProfile WithNamedItems(SharedRMCNamedItems named)
+        {
+            var profile = Clone();
+            profile.NamedItems = named;
+            return profile;
         }
 
         public HumanoidCharacterProfile Clone()

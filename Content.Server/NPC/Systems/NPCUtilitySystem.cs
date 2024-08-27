@@ -1,3 +1,5 @@
+using System.Linq;
+using Content.Server._RMC14.NPC;
 using Content.Server.Chemistry.Containers.EntitySystems;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.NPC.Queries;
@@ -27,7 +29,6 @@ using Microsoft.Extensions.ObjectPool;
 using Robust.Server.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using System.Linq;
 
 namespace Content.Server.NPC.Systems;
 
@@ -350,6 +351,10 @@ public sealed class NPCUtilitySystem : EntitySystem
                 }
 
                 return 0f;
+            }
+            case TargetIsNotDeadCon:
+            {
+                return !_mobState.IsDead(targetUid) ? 1f : 0f;
             }
             default:
                 throw new NotImplementedException();

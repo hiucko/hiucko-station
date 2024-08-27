@@ -56,7 +56,7 @@ public sealed partial class AudioTab : Control
             CCVars.MaxAmbientSources,
             SliderMaxAmbienceSounds,
             _cfg.GetCVar(CCVars.MinMaxAmbientSourcesConfigured),
-                                _cfg.GetCVar(CCVars.MaxMaxAmbientSourcesConfigured));
+            _cfg.GetCVar(CCVars.MaxMaxAmbientSourcesConfigured));
 
         Control.AddOptionCheckBox(CCVars.LobbyMusicEnabled, LobbyMusicCheckBox);
         Control.AddOptionCheckBox(CCVars.RestartSoundsEnabled, RestartSoundsCheckBox);

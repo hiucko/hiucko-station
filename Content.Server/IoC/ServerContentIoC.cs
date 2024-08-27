@@ -1,3 +1,6 @@
+using Content.Server._RMC14.Discord;
+using Content.Server._RMC14.LinkAccount;
+using Content.Server._RMC14.PlayTimeTracking;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -14,7 +17,6 @@ using Content.Server.Mapping;
 using Content.Server.Maps;
 using Content.Server.MoMMI;
 using Content.Server.NodeContainer.NodeGroups;
-using Content.Server.Players;
 using Content.Server.Players.JobWhitelist;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Players.RateLimiting;
@@ -68,6 +70,11 @@ namespace Content.Server.IoC
             IoCManager.Register<JobWhitelistManager>();
             IoCManager.Register<PlayerRateLimitManager>();
             IoCManager.Register<MappingManager>();
+
+            // RMC14
+            IoCManager.Register<LinkAccountManager>();
+            IoCManager.Register<RMCPlayTimeManager>();
+            IoCManager.Register<RMCDiscordManager>();
         }
     }
 }

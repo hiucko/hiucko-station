@@ -158,7 +158,7 @@ public sealed partial class SleepingSystem : EntitySystem
 
     private void OnSlip(Entity<SleepingComponent> ent, ref SlipAttemptEvent args)
     {
-        args.NoSlip = true;
+        args.Cancel();
     }
 
     private void OnConsciousAttempt(Entity<SleepingComponent> ent, ref ConsciousAttemptEvent args)

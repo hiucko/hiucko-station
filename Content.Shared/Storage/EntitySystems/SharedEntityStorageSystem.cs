@@ -183,10 +183,6 @@ public abstract class SharedEntityStorageSystem : EntitySystem
 
         if (component.Open)
         {
-            TryCloseStorage(target);
-        }
-        else
-        {
             TryOpenStorage(user, target);
         }
     }

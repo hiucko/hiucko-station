@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Content.Client._RMC14.NamedItems;
 using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
@@ -9,6 +10,10 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Sprite;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Guidebook;
+using Content.Shared._RMC14.LinkAccount;
+using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.NamedItems;
+using Content.Shared._RMC14.Prototypes;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
@@ -356,6 +361,38 @@ namespace Content.Client.Lobby.UI
 
             #endregion SpawnPriority
 
+            #region SquadPreference
+
+            SquadPreferenceButton.AddItem(Loc.GetString("loadout-none"), 0);
+            var squad = _entManager.System<SquadSystem>();
+            for (var i = 0; i < squad.SquadPrototypes.Length; i++)
+            {
+                var squadProto = squad.SquadPrototypes[i];
+                if (!squadProto.TryGetComponent(out SquadTeamComponent? team) ||
+                    !team.RoundStart)
+                {
+                    continue;
+                }
+
+                SquadPreferenceButton.AddItem(squadProto.Name, i + 1);
+            }
+
+            SquadPreferenceButton.OnItemSelected += args =>
+            {
+                SquadPreferenceButton.SelectId(args.Id);
+
+                if (args.Id == 0)
+                {
+                    SetSquadPreference(null);
+                    return;
+                }
+
+                if (squad.SquadPrototypes.TryGetValue(args.Id - 1, out var proto))
+                    SetSquadPreference(proto.ID);
+            };
+
+            #endregion SquadPreference
+
             #region Eyes
 
             EyeColorPicker.OnEyeColorPicked += newColor =>
@@ -399,6 +436,8 @@ namespace Content.Client.Lobby.UI
             #endregion Jobs
 
             TabContainer.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
+            // TODO RMC14 antags
+            TabContainer.SetTabVisible(2, false);
 
             RefreshTraits();
 
@@ -438,6 +477,27 @@ namespace Content.Client.Lobby.UI
             };
 
             SpeciesInfoButton.OnPressed += OnSpeciesInfoButtonPressed;
+
+            // RMC14
+            void SetItemName(RMCNamedItemType type, string itemName)
+            {
+                Profile = Profile?.WithNamedItems(new SharedRMCNamedItems
+                {
+                    PrimaryGunName = type == RMCNamedItemType.PrimaryGun ? itemName : Profile.NamedItems.PrimaryGunName,
+                    SidearmName = type == RMCNamedItemType.Sidearm ? itemName : Profile.NamedItems.SidearmName,
+                    HelmetName = type == RMCNamedItemType.Helmet ? itemName : Profile.NamedItems.HelmetName,
+                    ArmorName = type == RMCNamedItemType.Armor ? itemName : Profile.NamedItems.ArmorName,
+                });
+                SetDirty();
+            }
+
+            var namedItems = UserInterfaceManager.GetUIController<NamedItemsUIController>();
+            TabContainer.SetTabTitle(5, Loc.GetString("rmc-ui-named-items"));
+            TabContainer.SetTabVisible(5, namedItems.Available);
+            NamedItems.PrimaryGun.OnTextChanged += args => SetItemName(RMCNamedItemType.PrimaryGun, args.Text);
+            NamedItems.Sidearm.OnTextChanged += args => SetItemName(RMCNamedItemType.Sidearm, args.Text);
+            NamedItems.Helmet.OnTextChanged += args => SetItemName(RMCNamedItemType.Helmet, args.Text);
+            NamedItems.Armor.OnTextChanged += args => SetItemName(RMCNamedItemType.Armor, args.Text);
 
             UpdateSpeciesGuidebookIcon();
             IsDirty = false;
@@ -627,7 +687,7 @@ namespace Content.Client.Lobby.UI
                 ("humanoid-profile-editor-antag-preference-no-button", 1)
             };
 
-            foreach (var antag in _prototypeManager.EnumeratePrototypes<AntagPrototype>().OrderBy(a => Loc.GetString(a.Name)))
+            foreach (var antag in _prototypeManager.EnumerateCM<AntagPrototype>().OrderBy(a => Loc.GetString(a.Name)))
             {
                 if (!antag.SetPreference)
                     continue;
@@ -701,6 +761,11 @@ namespace Content.Client.Lobby.UI
             _loadoutWindow?.Dispose();
         }
 
+        public void RefreshRMC(SharedRMCPatronTier? tier)
+        {
+            TabContainer.SetTabVisible(5, tier is { NamedItems: true });
+        }
+
         /// <summary>
         /// Reloads the entire dummy entity for preview.
         /// </summary>
@@ -746,6 +811,7 @@ namespace Content.Client.Lobby.UI
             UpdateGenderControls();
             UpdateSkinColor();
             UpdateSpawnPriorityControls();
+            UpdateSquadPreferenceControls();
             UpdateAgeEdit();
             UpdateEyePickers();
             UpdateSaveButton();
@@ -753,6 +819,7 @@ namespace Content.Client.Lobby.UI
             UpdateHairPickers();
             UpdateCMarkingsHair();
             UpdateCMarkingsFacialHair();
+            UpdateNamedItems();
 
             RefreshAntags();
             RefreshJobs();
@@ -845,7 +912,9 @@ namespace Content.Client.Lobby.UI
                             ("departmentName", departmentName))
                     };
 
-                    if (firstCategory)
+                    category.Visible = department.IsCM && !department.Hidden;
+
+                    if (firstCategory && category.Visible)
                     {
                         firstCategory = false;
                     }
@@ -864,8 +933,7 @@ namespace Content.Client.Lobby.UI
                         {
                             new Label
                             {
-                                Text = Loc.GetString("humanoid-profile-editor-department-jobs-label",
-                                    ("departmentName", departmentName)),
+                                Text = department.CustomName ?? Loc.GetString("humanoid-profile-editor-department-jobs-label", ("departmentName", departmentName)),
                                 Margin = new Thickness(5f, 0, 0, 0)
                             }
                         }
@@ -877,6 +945,7 @@ namespace Content.Client.Lobby.UI
 
                 var jobs = department.Roles.Select(jobId => _prototypeManager.Index(jobId))
                     .Where(job => job.SetPreference)
+                    .Where(job => !job.Hidden)
                     .ToArray();
 
                 Array.Sort(jobs, JobUIComparer.Instance);
@@ -1222,6 +1291,12 @@ namespace Content.Client.Lobby.UI
             SetDirty();
         }
 
+        private void SetSquadPreference(EntProtoId<SquadTeamComponent>? newSquadPreference)
+        {
+            Profile = Profile?.WithSquadPreference(newSquadPreference);
+            SetDirty();
+        }
+
         public bool IsDirty
         {
             get => _isDirty;
@@ -1362,6 +1437,9 @@ namespace Content.Client.Lobby.UI
 
         public void UpdateSpeciesGuidebookIcon()
         {
+            if (!_cfgManager.GetCVar(CCVars.GuidebookShowEditorSpeciesButton))
+                return;
+
             SpeciesInfoButton.StyleClasses.Clear();
 
             var species = Profile?.Species;
@@ -1409,6 +1487,25 @@ namespace Content.Client.Lobby.UI
             }
 
             SpawnPriorityButton.SelectId((int) Profile.SpawnPriority);
+        }
+
+        private void UpdateSquadPreferenceControls()
+        {
+            if (Profile == null)
+            {
+                return;
+            }
+
+            var index = 0;
+            if (Profile.SquadPreference is { } preference)
+            {
+                var squads = new List<EntityPrototype>(_entManager.System<SquadSystem>().SquadPrototypes)
+                    .Select(s => s.ID)
+                    .ToList();
+                index = squads.IndexOf(preference.Id) + 1;
+            }
+
+            SquadPreferenceButton.SelectId(index);
         }
 
         private void UpdateHairPickers()
@@ -1517,6 +1614,14 @@ namespace Content.Client.Lobby.UI
 
             Markings.CurrentEyeColor = Profile.Appearance.EyeColor;
             EyeColorPicker.SetData(Profile.Appearance.EyeColor);
+        }
+
+        private void UpdateNamedItems()
+        {
+            NamedItems.PrimaryGun.Text = Profile?.NamedItems.PrimaryGunName ?? string.Empty;
+            NamedItems.Sidearm.Text = Profile?.NamedItems.SidearmName ?? string.Empty;
+            NamedItems.Helmet.Text = Profile?.NamedItems.HelmetName ?? string.Empty;
+            NamedItems.Armor.Text = Profile?.NamedItems.ArmorName ?? string.Empty;
         }
 
         private void UpdateSaveButton()

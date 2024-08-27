@@ -32,15 +32,15 @@ public sealed class CMExplosionSystem : SharedCMExplosionSystem
         if (args.User is not { } user)
             return;
 
-            var popup = Loc.GetString(ent.Comp.UserPopup, ("used", ent.Owner));
-            _popup.PopupEntity(popup, user, user, PopupType.LargeCaution);
+        var popup = Loc.GetString(ent.Comp.UserPopup, ("used", ent.Owner));
+        _popup.PopupEntity(popup, user, user, PopupType.LargeCaution);
 
-            popup = Loc.GetString(ent.Comp.OthersPopup, ("user", user), ("used", ent.Owner));
-            _popup.PopupEntity(popup, user, Filter.PvsExcept(user), true, ent.Comp.PopupType);
+        popup = Loc.GetString(ent.Comp.OthersPopup, ("user", user), ("used", ent.Owner));
+        _popup.PopupEntity(popup, user, Filter.PvsExcept(user), true, ent.Comp.PopupType);
 
-            var gender = CompOrNull<HumanoidAppearanceComponent>(user)?.Sex ?? Sex.Unsexed;
-            if (!ent.Comp.Sounds.TryGetValue(gender, out var sound))
-                return;
+        var gender = CompOrNull<HumanoidAppearanceComponent>(user)?.Sex ?? Sex.Unsexed;
+        if (!ent.Comp.Sounds.TryGetValue(gender, out var sound))
+            return;
 
         var filter = Filter.Pvs(user).RemoveWhere(s => !_humanoidVoicelines.ShouldPlayVoiceline(user, s));
         if (filter.Count == 0)

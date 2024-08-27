@@ -33,7 +33,7 @@ namespace Content.Client.Options.UI.Tabs
         private BindButton? _currentlyRebinding;
 
         private readonly Dictionary<BoundKeyFunction, KeyControl> _keyControls =
-        new();
+            new();
 
         private readonly List<Action> _deferCommands = new();
 
@@ -131,8 +131,8 @@ namespace Content.Client.Options.UI.Tabs
                 KeybindsContainer.AddChild(new Label
                 {
                     Text = Loc.GetString(headerContents),
-                                           FontColorOverride = StyleNano.NanoGold,
-                                           StyleClasses = { StyleNano.StyleClassLabelKeyText }
+                    FontColorOverride = StyleNano.NanoGold,
+                    StyleClasses = { StyleNano.StyleClassLabelKeyText }
                 });
             }
 
@@ -426,8 +426,8 @@ namespace Content.Client.Options.UI.Tabs
                 Priority = _currentlyRebinding.Binding?.Priority ?? 0,
                 Type = bindType,
                 CanFocus = key == Keyboard.Key.MouseLeft
-                || key == Keyboard.Key.MouseRight
-                || key == Keyboard.Key.MouseMiddle,
+                           || key == Keyboard.Key.MouseRight
+                           || key == Keyboard.Key.MouseMiddle,
                 CanRepeat = false
             };
 
@@ -488,8 +488,8 @@ namespace Content.Client.Options.UI.Tabs
                 {
                     Text = Loc.GetString(
                         $"ui-options-function-{CaseConversion.PascalToKebab(function.FunctionName)}"),
-                        HorizontalExpand = true,
-                        HorizontalAlignment = HAlignment.Left
+                    HorizontalExpand = true,
+                    HorizontalAlignment = HAlignment.Left
                 };
 
                 BindButton1 = new BindButton(parent, this, StyleBase.ButtonOpenRight);

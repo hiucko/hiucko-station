@@ -84,7 +84,7 @@ public abstract partial class SharedBuckleSystem
         if (!TryComp(args.User, out BuckleComponent? buckle))
             return;
 
-        if (buckle.BuckledTo == null && component.BuckleOnInteractHand)
+        if (buckle.BuckledTo == null)
             TryBuckle(args.User, args.User, uid, buckle, popup: true);
         else if (buckle.BuckledTo == uid)
             TryUnbuckle(args.User, args.User, buckle, popup: true);

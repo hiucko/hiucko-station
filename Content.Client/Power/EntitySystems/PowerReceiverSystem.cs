@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Content.Client.Power.Components;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
@@ -27,17 +26,5 @@ public sealed class PowerReceiverSystem : SharedPowerReceiverSystem
             return;
 
         component.Powered = state.Powered;
-    }
-
-    public override bool ResolveApc(EntityUid entity, [NotNullWhen(true)] ref SharedApcPowerReceiverComponent? component)
-    {
-        if (component != null)
-            return true;
-
-        if (!TryComp(entity, out ApcPowerReceiverComponent? receiver))
-            return false;
-
-        component = receiver;
-        return true;
     }
 }

@@ -33,9 +33,6 @@ public abstract partial class SharedToolSystem : EntitySystem
     [Dependency] private   readonly TurfSystem _turfs = default!;
     [Dependency] protected readonly SharedSolutionContainerSystem SolutionContainer = default!;
 
-    public const string CutQuality = "Cutting";
-    public const string PulseQuality = "Pulsing";
-
     public override void Initialize()
     {
         InitializeMultipleTool();

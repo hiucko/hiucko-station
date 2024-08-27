@@ -1,4 +1,4 @@
-using Content.Shared._RMC14.CCVar;
+﻿using Content.Shared._RMC14.CCVar;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
 using Robust.Shared.Configuration;
@@ -14,7 +14,7 @@ public sealed class HumanoidVoicelinesSystem : EntitySystem
     private static readonly ProtoId<SpeciesPrototype> ArachnidSpecies = "Arachnid";
     private static readonly ProtoId<SpeciesPrototype> DionaSpecies = "Diona";
     private static readonly ProtoId<SpeciesPrototype> DwarfSpecies = "Dwarf";
-    // private static readonly ProtoId<SpeciesPrototype> FelinidSpecies = "Felinid";
+    private static readonly ProtoId<SpeciesPrototype> FelinidSpecies = "Felinid";
     private static readonly ProtoId<SpeciesPrototype> HumanSpecies = "Human";
     private static readonly ProtoId<SpeciesPrototype> MothSpecies = "Moth";
     private static readonly ProtoId<SpeciesPrototype> ReptilianSpecies = "Reptilian";
@@ -25,7 +25,7 @@ public sealed class HumanoidVoicelinesSystem : EntitySystem
         [ArachnidSpecies] = RMCCVars.CMPlayVoicelinesArachnid,
         [DionaSpecies] = RMCCVars.CMPlayVoicelinesDiona,
         [DwarfSpecies] = RMCCVars.CMPlayVoicelinesDwarf,
-        //[FelinidSpecies] = RMCCVars.CMPlayVoicelinesFelinid, //if ccvar exists but isnt used, its not a big problem :clueless:
+        [FelinidSpecies] = RMCCVars.CMPlayVoicelinesFelinid,
         [HumanSpecies] = RMCCVars.CMPlayVoicelinesHuman,
         [MothSpecies] = RMCCVars.CMPlayVoicelinesMoth,
         [ReptilianSpecies] = RMCCVars.CMPlayVoicelinesReptilian,

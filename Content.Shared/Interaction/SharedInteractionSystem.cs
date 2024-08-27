@@ -18,6 +18,7 @@ using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Storage;
+using Content.Shared.Strip;
 using Content.Shared.Tag;
 using Content.Shared.Timing;
 using Content.Shared.UserInterface;
@@ -63,6 +64,7 @@ namespace Content.Shared.Interaction
         [Dependency] private readonly IRobustRandom _random = default!;
         [Dependency] private readonly TagSystem _tagSystem = default!;
         [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
+        [Dependency] private readonly SharedStrippableSystem _strippable = default!;
 
         private EntityQuery<IgnoreUIRangeComponent> _ignoreUiRangeQuery;
         private EntityQuery<FixturesComponent> _fixtureQuery;
@@ -325,7 +327,7 @@ namespace Content.Shared.Interaction
             if (!_itemQuery.HasComp(target))
                 return false;
 
-            var combatEv = new CombatModeShouldHandInteractEvent();
+            var combatEv = new CombatModeShouldHandInteractEvent(user);
             RaiseLocalEvent(target.Value, ref combatEv);
 
             if (combatEv.Cancelled)
@@ -1230,7 +1232,7 @@ namespace Content.Shared.Interaction
             if (wearer == user)
                 return true;
 
-            if (slotDef.StripHidden)
+            if (_strippable.IsStripHidden(slotDef, user))
                 return false;
 
             return InRangeUnobstructed(user, wearer) && _containerSystem.IsInSameOrParentContainer(user, wearer);
@@ -1381,5 +1383,5 @@ namespace Content.Shared.Interaction
     /// </summary>
     /// <param name="Cancelled">Whether the hand interaction should be cancelled.</param>
     [ByRefEvent]
-    public record struct CombatModeShouldHandInteractEvent(bool Cancelled = false);
+    public record struct CombatModeShouldHandInteractEvent(EntityUid User, bool Cancelled = false);
 }

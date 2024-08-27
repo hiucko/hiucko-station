@@ -57,7 +57,7 @@ public abstract class SharedChatSystem : EntitySystem
     private void CacheRadios()
     {
         _keyCodes = _prototypeManager.EnumeratePrototypes<RadioChannelPrototype>()
-            .ToFrozenDictionary(x => x.KeyCode);
+        .ToFrozenDictionary(x => x.KeyCode);
     }
 
     /// <summary>
@@ -169,27 +169,27 @@ public abstract class SharedChatSystem : EntitySystem
             return message;
 
         for
-        (
-            var index = message.IndexOf(theWordI);
-            index != -1;
-            index = message.IndexOf(theWordI, index + 1)
-        )
-        {
-            // Stops the code If It's tryIng to capItalIze the letter I In the mIddle of words
-            // Repeating the code twice is the simplest option
-            if (index + 1 < message.Length && char.IsLetter(message[index + 1]))
-                continue;
-            if (index - 1 >= 0 && char.IsLetter(message[index - 1]))
-                continue;
+            (
+                var index = message.IndexOf(theWordI);
+                index != -1;
+                index = message.IndexOf(theWordI, index + 1)
+            )
+            {
+                // Stops the code If It's tryIng to capItalIze the letter I In the mIddle of words
+                // Repeating the code twice is the simplest option
+                if (index + 1 < message.Length && char.IsLetter(message[index + 1]))
+                    continue;
+                if (index - 1 >= 0 && char.IsLetter(message[index - 1]))
+                    continue;
 
-            var beforeTarget = message.Substring(0, index);
-            var target = message.Substring(index, theWordI.Length);
-            var afterTarget = message.Substring(index + theWordI.Length);
+                var beforeTarget = message.Substring(0, index);
+                var target = message.Substring(index, theWordI.Length);
+                var afterTarget = message.Substring(index + theWordI.Length);
 
-            message = beforeTarget + target.ToUpper() + afterTarget;
-        }
+                message = beforeTarget + target.ToUpper() + afterTarget;
+            }
 
-        return message;
+            return message;
     }
 
     public static string SanitizeAnnouncement(string message, int maxLength = 0, int maxNewlines = 2)
@@ -236,17 +236,6 @@ public abstract class SharedChatSystem : EntitySystem
         rawmsg = rawmsg.Insert(tagEnd, $"[/{innerTag}]");
         rawmsg = rawmsg.Insert(tagStart, innerTagProcessed);
 
-        return rawmsg;
-    }
-
-    /// <summary>
-    /// Injects a tag around all found instances of a specific string in a ChatMessage.
-    /// Excludes strings inside other tags and brackets.
-    /// </summary>
-    public static string InjectTagAroundString(ChatMessage message, string targetString, string tag, string? tagParameter)
-    {
-        var rawmsg = message.WrappedMessage;
-        rawmsg = Regex.Replace(rawmsg, "(?i)(" + targetString + ")(?-i)(?![^[]*])", $"[{tag}={tagParameter}]$1[/{tag}]");
         return rawmsg;
     }
 
