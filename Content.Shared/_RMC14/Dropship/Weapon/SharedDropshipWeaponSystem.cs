@@ -3,7 +3,7 @@ using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Map;
-using Content.Shared._RMC14.Marines.Squads;
+//using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
@@ -55,7 +55,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SquadSystem _squad = default!;
+//    [Dependency] private readonly SquadSystem _squad = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
@@ -285,8 +285,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         var id = ent.Comp.Id;
         var name = Loc.GetString("rmc-laser-designator-target-name", ("id", id));
         var abbreviation = GetUserAbbreviation(user, id);
-        if (_squad.TryGetMemberSquad(user, out var squad))
-            name = Loc.GetString("rmc-laser-designator-target-name-squad", ("squad", squad), ("id", ent.Comp.Id));
+        name = Loc.GetString("rmc-laser-designator-target-name", ("id", ent.Comp.Id));
 
         var dropshipTarget = new DropshipTargetComponent { Abbreviation = abbreviation };
         AddComp(targetEnt, dropshipTarget, true);
@@ -671,15 +670,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     private string GetUserAbbreviation(EntityUid user, int id)
     {
         var abbreviation = Loc.GetString("rmc-laser-designator-target-abbreviation", ("id", id));
-        if (_squad.TryGetMemberSquad(user, out var squad))
-        {
-            var squadName = Name(squad);
-            if (!string.IsNullOrWhiteSpace(squadName) && squadName.Length > 0)
-                squadName = $"{squadName[0]}";
-
-            abbreviation = Loc.GetString("rmc-laser-designator-target-abbreviation-squad", ("letter", squadName), ("id", id));
-        }
-
+        abbreviation = Loc.GetString("rmc-laser-designator-target-abbreviation", ("id", id));
         return abbreviation;
     }
 
