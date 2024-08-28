@@ -821,7 +821,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
                         damageable,
                         ammo.Damage,
                         damageable: damageable,
-                        armorPiercing: ammo.ArmorPiercing
+                        //armorPiercing: ammo.ArmorPiercing //ap, waaaaaaaaaa
                     );
                 }
 

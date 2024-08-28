@@ -354,7 +354,7 @@ public abstract class SharedDropshipSystem : EntitySystem
             return false;
         }
 
-        _adminLog.Add(LogType.RMCPrimaryLZ, $"{ToPrettyString(actor):player} designated {ToPrettyString(lz):lz} as primary landing zone");
+        _adminLog.Add(LogType.Action, $"{ToPrettyString(actor):player} designated {ToPrettyString(lz):lz} as primary landing zone");
 
         EnsureComp<PrimaryLandingZoneComponent>(lz);
         RefreshUI();
