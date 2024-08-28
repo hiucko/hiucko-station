@@ -820,7 +820,7 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
                     _damageable.TryChangeDamage(
                         damageable,
                         ammo.Damage,
-                        damageable: damageable,
+                        damageable: damageable
                         //armorPiercing: ammo.ArmorPiercing //ap, waaaaaaaaaa
                     );
                 }

@@ -64,31 +64,31 @@ public abstract class SharedCMInventorySystem : EntitySystem
         SubscribeLocalEvent<CMItemSlotsComponent, EntRemovedFromContainerMessage>(OnSlotsEntRemovedFromContainer);
 
         CommandBinds.Builder
-        .Bind(CMKeyFunctions.CMHolsterPrimary,
-              InputCmdHandler.FromDelegate(session =>
-              {
-                  if (session?.AttachedEntity is { } entity)
-                      OnHolster(entity, 0);
-              }, handle: false))
-        .Bind(CMKeyFunctions.CMHolsterSecondary,
-              InputCmdHandler.FromDelegate(session =>
-              {
-                  if (session?.AttachedEntity is { } entity)
-                      OnHolster(entity, 1);
-              }, handle: false))
-        .Bind(CMKeyFunctions.CMHolsterTertiary,
-              InputCmdHandler.FromDelegate(session =>
-              {
-                  if (session?.AttachedEntity is { } entity)
-                      OnHolster(entity, 2);
-              }, handle: false))
-        .Bind(CMKeyFunctions.CMHolsterQuaternary,
-              InputCmdHandler.FromDelegate(session =>
-              {
-                  if (session?.AttachedEntity is { } entity)
-                      OnHolster(entity, 3, CMHolsterChoose.Last);
-              }, handle: false))
-        .Register<SharedCMInventorySystem>();
+            .Bind(CMKeyFunctions.CMHolsterPrimary,
+                InputCmdHandler.FromDelegate(session =>
+                {
+                    if (session?.AttachedEntity is { } entity)
+                        OnHolster(entity, 0);
+                }, handle: false))
+            .Bind(CMKeyFunctions.CMHolsterSecondary,
+                InputCmdHandler.FromDelegate(session =>
+                {
+                    if (session?.AttachedEntity is { } entity)
+                        OnHolster(entity, 1);
+                }, handle: false))
+            .Bind(CMKeyFunctions.CMHolsterTertiary,
+                InputCmdHandler.FromDelegate(session =>
+                {
+                    if (session?.AttachedEntity is { } entity)
+                        OnHolster(entity, 2);
+                }, handle: false))
+            .Bind(CMKeyFunctions.CMHolsterQuaternary,
+                InputCmdHandler.FromDelegate(session =>
+                {
+                    if (session?.AttachedEntity is { } entity)
+                        OnHolster(entity, 3, CMHolsterChoose.Last);
+                }, handle: false))
+            .Register<SharedCMInventorySystem>();
     }
 
     public override void Shutdown()
@@ -107,33 +107,33 @@ public abstract class SharedCMInventorySystem : EntitySystem
         if (ent.Comp.Slot is not { } slot || ent.Comp.Count is not { } count)
             return;
 
-            var itemId = ent.Comp.StartingItem;
-            var slots = EnsureComp<ItemSlotsComponent>(ent);
-            var coordinates = Transform(ent).Coordinates;
-            for (var i = 0; i < count; i++)
+        var itemId = ent.Comp.StartingItem;
+        var slots = EnsureComp<ItemSlotsComponent>(ent);
+        var coordinates = Transform(ent).Coordinates;
+        for (var i = 0; i < count; i++)
+        {
+            var n = i + 1;
+            var copy = new ItemSlot(slot);
+            copy.Name = $"{copy.Name} {n}";
+
+            _itemSlots.AddItemSlot(ent, $"{slot.Name}{n}", copy);
+
+            if (itemId != null)
             {
-                var n = i + 1;
-                var copy = new ItemSlot(slot);
-                copy.Name = $"{copy.Name} {n}";
-
-                _itemSlots.AddItemSlot(ent, $"{slot.Name}{n}", copy);
-
-                if (itemId != null)
+                if (copy.ContainerSlot is { } containerSlot)
                 {
-                    if (copy.ContainerSlot is { } containerSlot)
-                    {
-                        var item = Spawn(itemId, coordinates);
-                        _container.Insert(item, containerSlot);
-                    }
-                    else
-                    {
-                        copy.StartingItem = itemId;
-                    }
+                    var item = Spawn(itemId, coordinates);
+                    _container.Insert(item, containerSlot);
+                }
+                else
+                {
+                    copy.StartingItem = itemId;
                 }
             }
+        }
 
-            ContentsUpdated(ent);
-            Dirty(ent, slots);
+        ContentsUpdated(ent);
+        Dirty(ent, slots);
     }
 
     private void OnSlotsComponentHandleState(Entity<CMItemSlotsComponent> ent, ref AfterAutoHandleStateEvent args)
@@ -266,11 +266,11 @@ public abstract class SharedCMInventorySystem : EntitySystem
                     HasComp<CMItemSlotsComponent>(clothing) &&
                     SlotCanInteract(user, clothing, out var slotComp) &&
                     TryGetAvailableSlot((clothing, slotComp),
-                                        item,
-                                        user,
-                                        out var itemSlot,
-                                        emptyOnly: true) &&
-                                        itemSlot.ContainerSlot != null)
+                        item,
+                        user,
+                        out var itemSlot,
+                        emptyOnly: true) &&
+                    itemSlot.ContainerSlot != null)
                 {
                     validSlots.Add(new HolsterSlot(priority, true, null, (clothing, slotComp), ItemSlot: itemSlot));
                 }
@@ -301,188 +301,188 @@ public abstract class SharedCMInventorySystem : EntitySystem
         ContainerSlot? Slot,
         Entity<ItemSlotsComponent?> Ent,
         ItemSlot? ItemSlot) : IComparable<HolsterSlot>
+    {
+        public int CompareTo(HolsterSlot other)
         {
-            public int CompareTo(HolsterSlot other)
-            {
-                // Sort holsters first
-                // Then sort by priority between each holster and non-holster
+            // Sort holsters first
+            // Then sort by priority between each holster and non-holster
 
-                // If holster and holster
-                // Sort by priority higher first
-                if (IsHolster && other.IsHolster)
-                    return Priority.CompareTo(other.Priority);
+            // If holster and holster
+            // Sort by priority higher first
+            if (IsHolster && other.IsHolster)
+                return Priority.CompareTo(other.Priority);
 
-                // If only first is holster, then sort it higher
-                if (IsHolster)
-                    return -1;
-                return 1;
-            }
+            // If only first is holster, then sort it higher
+            if (IsHolster)
+                return -1;
+            return 1;
+        }
+    }
+
+    /// <summary>
+    /// Tries to get any slot that the <paramref name="item"/> can be inserted into.
+    /// </summary>
+    /// <param name="ent">Entity that <paramref name="item"/> is being inserted into.</param>
+    /// <param name="item">Entity being inserted into <paramref name="ent"/>.</param>
+    /// <param name="userEnt">Entity inserting <paramref name="item"/> into <paramref name="ent"/>.</param>
+    /// <param name="itemSlot">The ItemSlot on <paramref name="ent"/> to insert <paramref name="item"/> into.</param>
+    /// <param name="emptyOnly"> True only returns slots that are empty.
+    /// False returns any slot that is able to receive <paramref name="item"/>.</param>
+    /// <returns>True when a slot is found. Otherwise, false.</returns>
+    public bool TryGetAvailableSlot(Entity<ItemSlotsComponent?> ent,
+        EntityUid item,
+        Entity<HandsComponent?>? userEnt,
+        [NotNullWhen(true)] out ItemSlot? itemSlot,
+        bool emptyOnly = false)
+    {
+        // TODO Replace with ItemSlotsSystem version when upstream is merged
+        itemSlot = null;
+
+        if (userEnt is { } user && Resolve(user, ref user.Comp) && _hands.IsHolding(user, item))
+        {
+            if (!_hands.CanDrop(user, item, user.Comp))
+                return false;
         }
 
-        /// <summary>
-        /// Tries to get any slot that the <paramref name="item"/> can be inserted into.
-        /// </summary>
-        /// <param name="ent">Entity that <paramref name="item"/> is being inserted into.</param>
-        /// <param name="item">Entity being inserted into <paramref name="ent"/>.</param>
-        /// <param name="userEnt">Entity inserting <paramref name="item"/> into <paramref name="ent"/>.</param>
-        /// <param name="itemSlot">The ItemSlot on <paramref name="ent"/> to insert <paramref name="item"/> into.</param>
-        /// <param name="emptyOnly"> True only returns slots that are empty.
-        /// False returns any slot that is able to receive <paramref name="item"/>.</param>
-        /// <returns>True when a slot is found. Otherwise, false.</returns>
-        private bool TryGetAvailableSlot(Entity<ItemSlotsComponent?> ent,
-                                         EntityUid item,
-                                         Entity<HandsComponent?>? userEnt,
-                                         [NotNullWhen(true)] out ItemSlot? itemSlot,
-                                         bool emptyOnly = false)
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        var slots = new List<ItemSlot>();
+        foreach (var slot in ent.Comp.Slots.Values)
         {
-            // TODO Replace with ItemSlotsSystem version when upstream is merged
-            itemSlot = null;
+            if (emptyOnly && slot.ContainerSlot?.ContainedEntity != null)
+                continue;
 
-            if (userEnt is { } user && Resolve(user, ref user.Comp) && _hands.IsHolding(user, item))
-            {
-                if (!_hands.CanDrop(user, item, user.Comp))
-                    return false;
-            }
-
-            if (!Resolve(ent, ref ent.Comp, false))
-                return false;
-
-            var slots = new List<ItemSlot>();
-            foreach (var slot in ent.Comp.Slots.Values)
-            {
-                if (emptyOnly && slot.ContainerSlot?.ContainedEntity != null)
-                    continue;
-
-                if (_itemSlots.CanInsert(ent, item, userEnt, slot))
-                    slots.Add(slot);
-            }
-
-            if (slots.Count == 0)
-                return false;
-
-            slots.Sort(ItemSlotsSystem.SortEmpty);
-
-            itemSlot = slots[0];
-            return true;
+            if (_itemSlots.CanInsert(ent, item, userEnt, slot))
+                slots.Add(slot);
         }
 
-        private void Unholster(EntityUid user, int startIndex, CMHolsterChoose choose)
+        if (slots.Count == 0)
+            return false;
+
+        slots.Sort(ItemSlotsSystem.SortEmpty);
+
+        itemSlot = slots[0];
+        return true;
+    }
+
+    private void Unholster(EntityUid user, int startIndex, CMHolsterChoose choose)
+    {
+        if (_order.Length == 0)
+            return;
+
+        if (startIndex >= _order.Length)
+            startIndex = _order.Length - 1;
+
+        for (var i = startIndex; i < _order.Length; i++)
         {
-            if (_order.Length == 0)
+            if (Unholster(user, _order[i], choose, out var stop) || stop)
                 return;
-
-            if (startIndex >= _order.Length)
-                startIndex = _order.Length - 1;
-
-            for (var i = startIndex; i < _order.Length; i++)
-            {
-                if (Unholster(user, _order[i], choose, out var stop) || stop)
-                    return;
-            }
-
-            for (var i = 0; i < startIndex; i++)
-            {
-                if (Unholster(user, _order[i], choose, out var stop) || stop)
-                    return;
-            }
         }
 
-        private bool Unholster(EntityUid user, SlotFlags flag, CMHolsterChoose choose, out bool stop)
+        for (var i = 0; i < startIndex; i++)
         {
-            stop = false;
-            var enumerator = _inventory.GetSlotEnumerator(user, flag);
+            if (Unholster(user, _order[i], choose, out var stop) || stop)
+                return;
+        }
+    }
 
-            if (choose == CMHolsterChoose.Last)
+    private bool Unholster(EntityUid user, SlotFlags flag, CMHolsterChoose choose, out bool stop)
+    {
+        stop = false;
+        var enumerator = _inventory.GetSlotEnumerator(user, flag);
+
+        if (choose == CMHolsterChoose.Last)
+        {
+            var items = new List<EntityUid>();
+            while (enumerator.NextItem(out var next))
             {
-                var items = new List<EntityUid>();
-                while (enumerator.NextItem(out var next))
-                {
-                    items.Add(next);
-                }
-
-                items.Reverse();
-
-                foreach (var item in items)
-                {
-                    if (Unholster(user, item, out stop))
-                        return true;
-                }
+                items.Add(next);
             }
-            while (enumerator.NextItem(out var item))
+
+            items.Reverse();
+
+            foreach (var item in items)
             {
                 if (Unholster(user, item, out stop))
                     return true;
             }
-
-            return false;
+        }
+        while (enumerator.NextItem(out var item))
+        {
+            if (Unholster(user, item, out stop))
+                return true;
         }
 
-        private bool Unholster(EntityUid user, EntityUid item, out bool stop)
-        {
-            stop = false;
-            if (HasComp<CMHolsterComponent>(item))
-            {
-                if (TryComp(item, out CMItemSlotsComponent? holster) &&
-                    holster.Cooldown is { } cooldown &&
-                    _timing.CurTime < holster.LastEjectAt + cooldown)
-                {
-                    stop = true;
-                    _popup.PopupPredicted(holster.CooldownPopup, user, user, PopupType.SmallCaution);
-                    return false;
-                }
+        return false;
+    }
 
-                if (PickupSlot(user, item))
+    private bool Unholster(EntityUid user, EntityUid item, out bool stop)
+    {
+        stop = false;
+        if (HasComp<CMHolsterComponent>(item))
+        {
+            if (TryComp(item, out CMItemSlotsComponent? holster) &&
+                holster.Cooldown is { } cooldown &&
+                _timing.CurTime < holster.LastEjectAt + cooldown)
+            {
+                stop = true;
+                _popup.PopupPredicted(holster.CooldownPopup, user, user, PopupType.SmallCaution);
+                return false;
+            }
+
+            if (PickupSlot(user, item))
+                return true;
+        }
+
+        var ev = new IsUnholsterableEvent();
+        RaiseLocalEvent(item, ref ev);
+
+        if (!ev.Unholsterable)
+            return false;
+
+        return _hands.TryPickup(user, item);
+    }
+
+    public bool TryEquipClothing(EntityUid user, Entity<ClothingComponent> clothing)
+    {
+        foreach (var order in _quickEquipOrder)
+        {
+            if ((clothing.Comp.Slots & order) == 0)
+                continue;
+
+            if (!_inventory.TryGetContainerSlotEnumerator(user, out var slots, clothing.Comp.Slots))
+                continue;
+
+            while (slots.MoveNext(out var slot))
+            {
+                if (_inventory.TryEquip(user, clothing, slot.ID))
                     return true;
             }
-
-            var ev = new IsUnholsterableEvent();
-            RaiseLocalEvent(item, ref ev);
-
-            if (!ev.Unholsterable)
-                return false;
-
-            return _hands.TryPickup(user, item);
         }
 
-        public bool TryEquipClothing(EntityUid user, Entity<ClothingComponent> clothing)
+        return false;
+    }
+
+    public (int Filled, int Total) GetItemSlotsFilled(Entity<ItemSlotsComponent?> slots)
+    {
+        if (!Resolve(slots, ref slots.Comp, false))
+            return (0, 0);
+
+        var total = slots.Comp.Slots.Count;
+        if (total == 0)
+            return (0, 0);
+
+        var filled = 0;
+        foreach (var (_, slot) in slots.Comp.Slots)
         {
-            foreach (var order in _quickEquipOrder)
+            if (slot.ContainerSlot?.ContainedEntity is { } contained &&
+                !TerminatingOrDeleted(contained))
             {
-                if ((clothing.Comp.Slots & order) == 0)
-                    continue;
-
-                if (!_inventory.TryGetContainerSlotEnumerator(user, out var slots, clothing.Comp.Slots))
-                    continue;
-
-                while (slots.MoveNext(out var slot))
-                {
-                    if (_inventory.TryEquip(user, clothing, slot.ID))
-                        return true;
-                }
+                filled++;
             }
-
-            return false;
         }
 
-        public (int Filled, int Total) GetItemSlotsFilled(Entity<ItemSlotsComponent?> slots)
-        {
-            if (!Resolve(slots, ref slots.Comp, false))
-                return (0, 0);
-
-            var total = slots.Comp.Slots.Count;
-            if (total == 0)
-                return (0, 0);
-
-            var filled = 0;
-            foreach (var (_, slot) in slots.Comp.Slots)
-            {
-                if (slot.ContainerSlot?.ContainedEntity is { } contained &&
-                    !TerminatingOrDeleted(contained))
-                {
-                    filled++;
-                }
-            }
-
-            return (filled, slots.Comp.Slots.Count);
-        }
+        return (filled, slots.Comp.Slots.Count);
+    }
 }
