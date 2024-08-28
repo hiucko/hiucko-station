@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Content.Server._RMC14.Marines;
 using Content.Server.Doors.Systems;
 using Content.Server.GameTicking;
 using Content.Server.Shuttles.Components;
@@ -7,11 +6,7 @@ using Content.Server.Shuttles.Events;
 using Content.Server.Shuttles.Systems;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
-using Content.Shared._RMC14.Marines;
-using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Rules;
-using Content.Shared._RMC14.Xenonids;
-using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
@@ -36,14 +31,11 @@ public sealed class DropshipSystem : SharedDropshipSystem
     [Dependency] private readonly IConfigurationManager _config = default!;
     [Dependency] private readonly DoorSystem _door = default!;
     [Dependency] private readonly GameTicker _gameTicker = default!;
-    [Dependency] private readonly MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly TransformSystem _transform = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly SharedXenoAnnounceSystem _xenoAnnounce = default!;
 
     private EntityQuery<DockingComponent> _dockingQuery;
     private EntityQuery<DoorComponent> _doorQuery;
@@ -184,13 +176,6 @@ public sealed class DropshipSystem : SharedDropshipSystem
         var newDestination = CompOrNull<DropshipDestinationComponent>(destination);
         if (dropship.Destination == destination)
         {
-            if (user != null && !_skills.HasSkill(user.Value, computer.Comp.Skill, computer.Comp.FlyBySkillLevel))
-            {
-                var msg = Loc.GetString("rmc-dropship-flyby-no-skill");
-                _popup.PopupEntity(msg, user.Value, user.Value, PopupType.MediumCaution);
-                return false;
-            }
-
             EnsureComp<DropshipInFlyByComponent>(dropshipId.Value);
         }
 
@@ -219,19 +204,13 @@ public sealed class DropshipSystem : SharedDropshipSystem
             }
             else
             {
-                var hasSkill = user != null && _skills.HasSkill(user.Value, computer.Comp.Skill, computer.Comp.MultiplierSkillLevel);
-                var rechargeMultiplier = hasSkill ? computer.Comp.SkillRechargeMultiplier : 1f;
                 if (dropship.Destination == destination)
                 {
                     hyperspaceTime = (float) _flyByTime.TotalSeconds;
-                    if (hasSkill)
-                        hyperspaceTime *= computer.Comp.SkillFlyByMultiplier;
                 }
                 else
                 {
                     hyperspaceTime = _shuttle.DefaultTravelTime;
-                    if (hasSkill)
-                        hyperspaceTime *= computer.Comp.SkillTravelMultiplier;
                 }
 
                 dropship.RechargeTime = TimeSpan.FromSeconds(_config.GetCVar(CCVars.FTLCooldown) * rechargeMultiplier);
@@ -250,19 +229,6 @@ public sealed class DropshipSystem : SharedDropshipSystem
         destCoords = destCoords.Offset(new Vector2(-0.5f, -0.5f));
 
         _shuttle.FTLToCoordinates(dropshipId.Value, shuttleComp, destCoords, rotation, startupTime: startupTime, hyperspaceTime: hyperspaceTime);
-
-        if (user != null && hijack)
-        {
-            var xenoText = "The Queen has commanded the metal bird to depart for the metal hive in the sky! Rejoice!";
-            _xenoAnnounce.AnnounceSameHive(user.Value, xenoText);
-            _audio.PlayPvs(dropship.LocalHijackSound, dropshipId.Value);
-
-            var marineText = "Unscheduled dropship departure detected from operational area. Hijack likely. Shutting down autopilot.";
-            _marineAnnounce.AnnounceRadio(dropshipId.Value, marineText, dropship.AnnounceHijackIn);
-
-            var marines = Filter.Empty().AddWhereAttachedEntity(e => !HasComp<XenoComponent>(e));
-            _audio.PlayGlobal(dropship.MarineHijackSound, marines, true);
-        }
 
         _adminLog.Add(LogType.RMCDropshipLaunch,
             $"{ToPrettyString(user):player} {(hijack ? "hijacked" : "launched")} {ToPrettyString(dropshipId):dropship} to {ToPrettyString(destination):destination}");
@@ -402,8 +368,6 @@ public sealed class DropshipSystem : SharedDropshipSystem
 
             dropship.AnnouncedCrash = true;
             Dirty(uid, dropship);
-
-            _marineAnnounce.AnnounceToMarines(Loc.GetString("rmc-announcement-emergency-dropship-crash"), dropship.CrashWarningSound);
         }
 
         if (Count<PrimaryLandingZoneComponent>() > 0)

@@ -3,7 +3,6 @@ using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Map;
-using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Coordinates.Helpers;
@@ -56,7 +55,6 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
     [Dependency] private readonly SquadSystem _squad = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -233,8 +231,6 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         }
 
         var delay = ent.Comp.Delay;
-        var skill = _skills.GetSkill(user, ent.Comp.Skill);
-        delay -= skill * ent.Comp.TimePerSkillLevel;
 
         if (delay < ent.Comp.MinimumDelay)
             delay = ent.Comp.MinimumDelay;
@@ -485,13 +481,6 @@ public abstract class SharedDropshipWeaponSystem : EntitySystem
         if (!_casDebug && !_area.CanCAS(coordinates))
         {
             var msg = Loc.GetString("rmc-laser-designator-not-cas");
-            _popup.PopupClient(msg, actor);
-            return;
-        }
-
-        if (!_casDebug && weaponComp.Skills != null && !_skills.HasSkills(actor, weaponComp.Skills))
-        {
-            var msg = Loc.GetString("rmc-laser-designator-not-skilled");
             _popup.PopupClient(msg, actor);
             return;
         }

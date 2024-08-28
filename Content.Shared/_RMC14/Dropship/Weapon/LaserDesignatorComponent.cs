@@ -1,5 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
-using Robust.Shared.Audio;
+﻿using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -21,12 +20,12 @@ public sealed partial class LaserDesignatorComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan MinimumDelay = TimeSpan.FromSeconds(1.5);
 
-    [DataField, AutoNetworkedField]
-    public TimeSpan TimePerSkillLevel = TimeSpan.FromSeconds(2.5);
-
-    [DataField, AutoNetworkedField]
-    public EntProtoId<SkillDefinitionComponent> Skill = "RMCSkillJtac";
-
+//    [DataField, AutoNetworkedField]
+//    public TimeSpan TimePerSkillLevel = TimeSpan.FromSeconds(2.5);
+//
+//    [DataField, AutoNetworkedField]
+//    public EntProtoId<SkillDefinitionComponent> Skill = "RMCSkillJtac";
+//
     [DataField, AutoNetworkedField]
     public EntProtoId<LaserDesignatorTargetComponent> TargetSpawn = "RMCLaserDesignatorTarget";
 

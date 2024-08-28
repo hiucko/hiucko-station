@@ -3,7 +3,6 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Rules;
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -113,11 +112,6 @@ public abstract class SharedDropshipSystem : EntitySystem
             return;
 
         var user = args.User;
-        if (!HasComp<XenoComponent>(user))
-        {
-            _popup.PopupEntity("This terminal doesn't seem to work yet... Maybe you should ask High Command?", user, user, PopupType.MediumCaution);
-            return;
-        }
 
         if (!HasComp<DropshipHijackerComponent>(user))
         {

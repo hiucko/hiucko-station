@@ -1,5 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.Skills;
-using Robust.Shared.GameStates;
+﻿using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Utility;
@@ -25,8 +24,8 @@ public sealed partial class DropshipWeaponComponent : Component
     [DataField, AutoNetworkedField]
     public bool FireInTransport;
 
-    [DataField, AutoNetworkedField]
-    public SkillWhitelist? Skills;
+//    [DataField, AutoNetworkedField]
+//    public SkillWhitelist? Skills;
 
     [DataField, AutoNetworkedField]
     public SpriteSpecifier.Rsi? WeaponAttachedSprite;
