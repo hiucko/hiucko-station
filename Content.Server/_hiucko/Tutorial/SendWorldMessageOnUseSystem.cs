@@ -10,7 +10,7 @@ public sealed class SendWorldMessageOnUseSystem  : EntitySystem // Сама си
 
     public override void Initialize() // При инициализации компонента
     {
-        base.Initialize; //
+        base.Initialize(); //
 
         SubscribeLocalEvent<SendWorldMessageOnUseComponent, UseInHandEvent>(OnUseInHand); // Через наш компонент вызывает OnUseInHand при UseInHandEvent  
     }
