@@ -17,6 +17,6 @@ public sealed class SendWorldMessageOnUseSystem  : EntitySystem // Сама си
 
     private void OnUseInHand(Entity<SendWorldMessageOnUseComponent> entity, ref UseInHandEvent args) // Исполняет код на сущности entity, получая её аргументы из UseInHandEvent 
     {
-        _popup.PopupEntity("Hello World!", entity.Owner);  // Само всплывающее сообщение владельцу сущности. Владелец сущности получается из "ref UseInHandEvent args"
+        _popup.PopupEntity(entity.Comp.Message, entity.Owner);  // Само всплывающее сообщение владельцу сущности. Владелец сущности получается из "ref UseInHandEvent args"
     }
 }
