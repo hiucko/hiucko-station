@@ -9,3 +9,4 @@
     state: icon
   - type: Item
     size: Small
+  - type: SendWorldMessageOnUse # Наш компонент
