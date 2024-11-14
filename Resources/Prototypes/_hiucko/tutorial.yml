@@ -1,0 +1,11 @@
+- type: entity
+  parent: BaseItem
+  id: ItemTutorial
+  name: very cool item
+  description: Removes fun. No fun allowed!
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/access_configurator.rsi
+    state: icon
+  - type: Item
+    size: Small
