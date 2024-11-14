@@ -10,4 +10,4 @@
   - type: Item
     size: Small
   - type: SendWorldMessageOnUse # Наш компонент
-    message: ПРОКЛЯТЬЕ 220! УЭЭЭЭЭЭЭЭЭЭЭЭ
+    message: ПРОКЛЯТЬЕ 220! УЭЭЭЭЭЭЭЭЭЭЭЭ # Спасибо 220 :D
