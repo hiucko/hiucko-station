@@ -1,0 +1,15 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                MinSize="450 450"
+                SetSize="450 450">
+    <BoxContainer Margin="4 0" Orientation="Horizontal">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+            <GridContainer Margin="2 0 0 0" Columns="2">
+                <Label Text="{Loc 'power-charge-window-power'}" HorizontalExpand="True" StyleClasses="StatusFieldTitle" />
+                <Label Text="{Loc 'power-charge-window-status'}"  StyleClasses="StatusFieldTitle" />
+                <Label Text="{Loc 'power-charge-window-eta'}" StyleClasses="StatusFieldTitle" />
+                <Label Text="{Loc 'power-charge-window-charge'}" StyleClasses="StatusFieldTitle" />
+            </GridContainer>
+        </BoxContainer>
+    </BoxContainer>
+</controls:FancyWindow>
