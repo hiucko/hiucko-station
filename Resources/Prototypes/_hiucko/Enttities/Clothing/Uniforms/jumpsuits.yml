@@ -1,0 +1,10 @@
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitCamo
+  name: camouflaged jumpsuit
+  description: Camouflaged jumpsuit used by special forces in special operations.
+  components:
+  - type: Sprite
+    sprite: _hiucko/Uniforms/Jumpsuit/camo.rsi
+  - type: Clothing
+    sprite: _hiucko/Uniforms/Jumpsuit/camo.rsi
